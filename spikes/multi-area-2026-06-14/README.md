@@ -1,6 +1,6 @@
 # multi-area スパイク（2026-06-14）— SCP v1.0 §12 配送層
 
-`12-delivery-layer.md` §10 の主張を裏付ける**再現可能成果物**（F1 対応＝「主張は適合出力で裏付ける」原則の自己適用）。
+`../../ja/12-delivery-layer.md` §10 の主張を裏付ける**再現可能成果物**（F1 対応＝「主張は適合出力で裏付ける」原則の自己適用）。
 
 > **注**: 本スパイクの `run.sh` / `transcript.txt` は実行・記録時点の実バイナリ名 `traceability-engine`（v0.4.0-alpha4）をそのまま保持する（再現の忠実性のため）。本ツールは `legixy` に改称・再構築中であり、ドキュメント本文では `legixy` と表記する。両者は同一の実体。
 
@@ -14,7 +14,7 @@
 4. **F2（最重要）**: `ChainIntegrity` は `Severity::Warning` かつエンジン exit は ERROR 数のみで決まるため、
    配送エッジを切っても **WARNING は出るが exit=0**。すなわち `check --formal` 単独では**ゲートにならない**
    （legixy の「0 ERROR で素通り」の連結レベルでの再来）。→ ラッパ（`scripts/trace-check.sh`）が
-   ChainIntegrity WARNING を grep して RED に escalate する必要がある（`12-delivery-layer.md` §7）。
+   ChainIntegrity WARNING を grep して RED に escalate する必要がある（`../../ja/12-delivery-layer.md` §7）。
 
 ## 実行
 

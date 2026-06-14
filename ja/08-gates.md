@@ -51,7 +51,7 @@ AI レビュア層は機械検証と人間判断の間を埋める。9 観点・
 >
 > 🔴 **F2（最重要・ゲート化の必須条件）**: 配送チェーンの断裂は `ChainIntegrity` で「検出」されるが、これは
 > `Severity::Warning` であり、`legixy` の終了コードは **ERROR 数のみ**で決まる。すなわち配送エッジが
-> 切れていても `check --formal` は **WARNING を出すが exit=0**（再現: `spikes/multi-area-2026-06-14/`）。
+> 切れていても `check --formal` は **WARNING を出すが exit=0**（再現: `../spikes/multi-area-2026-06-14/`）。
 > **「検出」≠「ゲート」**。④を実ゲート化するには、ラッパ（`scripts/trace-check.sh` 等）が出力中の
 > `ChainIntegrity` WARNING を grep して **非ゼロ exit に escalate** しなければならない。これを欠くと、配送層を
 > 足しても孤児・断裂が素通りし、本ゲートの目的（契約サーフェスの孤児防止）が達成されない。

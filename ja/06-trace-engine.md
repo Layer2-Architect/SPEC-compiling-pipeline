@@ -2,11 +2,11 @@
 
 このドキュメントは legixy v3 を実行・設定するときに参照する。
 
-> **ツール名について（重要）**: `legixy` は本フレームワーク（SCP）が用いるトレーサビリティエンジンの名称である。**SCP の開発時点ではこのツールは `traceability-engine`（v3 / v0.4.0-alpha4）として実装されており、公開にあたり `legixy` へ改称・再構築している。** 本書および本フレームワークの文書はすべて新名称 `legixy` で記述するが、**現在配布されている実バイナリ名は `traceability-engine` の場合がある**（両者は同一の実体）。`spikes/` 配下の再現スクリプト／トランスクリプトは、実行・記録時点の実バイナリ名 `traceability-engine` をそのまま保持している。
+> **ツール名について（重要）**: `legixy` は本フレームワーク（SCP）が用いるトレーサビリティエンジンの名称である。**SCP の開発時点ではこのツールは `traceability-engine`（v3 / v0.4.0-alpha4）として実装されており、公開にあたり `legixy` へ改称・再構築している。** 本書および本フレームワークの文書はすべて新名称 `legixy` で記述するが、**現在配布されている実バイナリ名は `traceability-engine` の場合がある**（両者は同一の実体）。`../spikes/` 配下の再現スクリプト／トランスクリプトは、実行・記録時点の実バイナリ名 `traceability-engine` をそのまま保持している。
 
 ツール本体は別配布: `~/.local/bin/legixy`（v0.4.0-alpha4 以降。現行配布の実バイナリ名は `traceability-engine` の場合がある）。本フレームワークはlegixy を前提とする（grep-only fallback は提供しない）。
 
-詳細仕様は `manual/legixy/manual.md` を参照（公式マニュアルのコピー）。本ドキュメントは本フレームワーク運用上の最低限のサマリ。
+詳細仕様は `../manual/legixy/manual.md` を参照（公式マニュアルのコピー）。本ドキュメントは本フレームワーク運用上の最低限のサマリ。
 
 ## 1. `.trace-engine.toml` の構造
 
@@ -220,7 +220,7 @@ legixy drift SPEC-<AREA>-NNN
 
 ## 9. 領域分割の運用（multi-area）
 
-> 旧版の「v3 は `area` 単一値のみ」という記述は**誤り**として撤回した（`spikes/multi-area-2026-06-14/` で
+> 旧版の「v3 は `area` 単一値のみ」という記述は**誤り**として撤回した（`../spikes/multi-area-2026-06-14/` で
 > 実 v3 バイナリにて反証済み）。legixy v0.4.0-alpha4 は複数 area と area 別チェーンを正式サポートする。
 
 `[id]` に `areas`（配列）を、area ごとに `[[id.chains]]` ブロックを置くと、**1 area = 1 本の線形チェーン**として
@@ -253,7 +253,7 @@ independent = ["ADR"]
 
 ## 10. 詳しいリファレンス
 
-公式マニュアルの全文は `manual/legixy/manual.md`。主要章節:
+公式マニュアルの全文は `../manual/legixy/manual.md`。主要章節:
 
 - §2.5 設定ファイル（`.trace-engine.toml`）
 - §3 graph.toml の構造
