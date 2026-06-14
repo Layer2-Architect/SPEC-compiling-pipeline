@@ -1,0 +1,142 @@
+# docs/traceability/graph.toml — SCP フレームワーク標準テンプレート
+#
+# このファイルは legixy v3 が全成果物を発見するための
+# レジストリ。新規成果物を追加するたびに [[nodes]] エントリを追加すること。
+#
+# - `[[nodes]]` の type は必須（typecode 文字列）
+# - `[[edges]]` の kind は chain / parent_child / custom
+# - chain 内成果物（UC → RBA → SEQA → RBD → SEQD → DD → TS → TC → SRC）の親子関係は
+#   `.trace-engine.toml` の `[id.chain] order` から自動推測されるため、
+#   edges に書かなくてもよい
+# - chain 外成果物の関連（TP → SPEC, GAP → TP, ADR → SPEC など）は
+#   本文 metadata で管理する
+
+# ============================================
+# SPEC（独立）
+# ============================================
+
+# [[nodes]]
+# id = "SPEC-<AREA>-001"
+# type = "SPEC"
+# path = "docs/specs/SPEC-<AREA>-001_<description>.md"
+
+# ============================================
+# TP（独立）
+# ============================================
+
+# [[nodes]]
+# id = "TP-<AREA>-001"
+# type = "TP"
+# path = "docs/test-perspectives/TP-<AREA>-001.md"
+
+# ============================================
+# GAP（独立）
+# ============================================
+
+# [[nodes]]
+# id = "GAP-<AREA>-001"
+# type = "GAP"
+# path = "docs/gap-analysis/GAP-<AREA>-001.md"
+
+# ============================================
+# UC（chain 起点）
+# ============================================
+
+# [[nodes]]
+# id = "UC-<AREA>-001"
+# type = "UC"
+# path = "docs/usecases/UC-<AREA>-001_<description>.md"
+
+# ============================================
+# RBA / SEQA（ICONIX 抽象層、ドメインレベル）
+# ============================================
+
+# [[nodes]]
+# id = "RBA-<AREA>-001"
+# type = "RBA"
+# path = "docs/robustness-abstract/RBA-<AREA>-001.md"
+
+# [[nodes]]
+# id = "SEQA-<AREA>-001"
+# type = "SEQA"
+# path = "docs/sequence-abstract/SEQA-<AREA>-001.md"
+
+# ============================================
+# RBD / SEQD（ICONIX 具体層、クラス図レベル、言語非依存）
+# ============================================
+
+# [[nodes]]
+# id = "RBD-<AREA>-001"
+# type = "RBD"
+# path = "docs/robustness-detail/RBD-<AREA>-001.md"
+
+# [[nodes]]
+# id = "SEQD-<AREA>-001"
+# type = "SEQD"
+# path = "docs/sequence-detail/SEQD-<AREA>-001.md"
+
+# ============================================
+# DD / TS / TC / SRC（言語固有要素を含む）
+# ============================================
+
+# [[nodes]]
+# id = "DD-<AREA>-001"
+# type = "DD"
+# path = "docs/detailed-design/DD-<AREA>-001.md"
+
+# ============================================
+# 独立 typecode（ADR / AT / NFR / VAL）
+# ============================================
+
+# [[nodes]]
+# id = "ADR-<AREA>-001"
+# type = "ADR"
+# path = "docs/adr/ADR-<AREA>-001_<title>.md"
+
+# ============================================
+# 前段ループ独立 typecode（QSET / SPP / FCR）
+# Raw SPEC → 前段ループ → Accepted SPEC の正規化過程の成果物。
+# 親子関係（QSET → SPEC, SPP → QSET, FCR → SPEC）は本文 metadata で管理。
+# ============================================
+
+# [[nodes]]
+# id = "QSET-<AREA>-001"
+# type = "QSET"
+# path = "docs/frontend-pass/questionnaires/QSET-<AREA>-001.md"
+
+# [[nodes]]
+# id = "SPP-<AREA>-001"
+# type = "SPP"
+# path = "docs/spec-patches/SPP-<AREA>-001.md"
+
+# [[nodes]]
+# id = "FCR-<AREA>-001"
+# type = "FCR"
+# path = "docs/frontend-pass/check-results/FCR-<AREA>-001.md"
+
+# ============================================
+# RPC（独立、v1.0）責務保存率検査
+# 親子関係（対象 UC / RBA / SEQA / RBD / SEQD）は本文 metadata で管理。
+# 詳細は 11-responsibility-preservation-check.md。
+# ============================================
+
+# [[nodes]]
+# id = "RPC-<AREA>-001"
+# type = "RPC"
+# path = "docs/responsibility-preservation/RPC-<AREA>-001_<description>.md"
+
+# ============================================
+# edges（必要に応じて）
+# ============================================
+
+# chain 内は自動推測されるため通常不要。明示したい場合のみ:
+# [[edges]]
+# from = "UC-<AREA>-001"
+# to = "RB-<AREA>-001"
+# kind = "chain"
+
+# chain 外の関連を明示したい場合（任意）:
+# [[edges]]
+# from = "ADR-<AREA>-001"
+# to = "SPEC-<AREA>-008"
+# kind = "parent_child"

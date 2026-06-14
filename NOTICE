@@ -1,0 +1,12 @@
+SPEC Compiling Pipeline (SCP)
+Copyright 2026 SPEC Compiling Pipeline authors
+
+This product includes software/documentation developed as the
+SPEC Compiling Pipeline (formerly "DevProc"), a quality-bias-prevention
+framework for operating AI as a software compiler from SPEC/UC.
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+The traceability tooling referenced throughout (`legixy`, formerly
+`traceability-engine`) is distributed separately and is not included
+in this repository.

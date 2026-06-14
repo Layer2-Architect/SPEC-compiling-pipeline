@@ -1,0 +1,15 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# SCP runtime state (generated in consuming projects, not part of the framework)
+.scp/
+
+# local engine artifacts (legixy / traceability-engine)
+.trace-engine/
+*.db
+
+# scratch
+/tmp/

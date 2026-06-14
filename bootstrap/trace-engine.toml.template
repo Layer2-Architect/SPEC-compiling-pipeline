@@ -1,0 +1,192 @@
+# .trace-engine.toml — SCP フレームワーク標準テンプレート
+#
+# 使い方:
+#   1. このファイルをプロジェクトルートに `.trace-engine.toml` としてコピー
+#   2. <YOUR-AREA> を 3〜5 文字の area コードに置換（例: APP, OPS, PAY, CMS）
+#   3. project.name を自プロジェクト名に置換
+#   4. 必要なら typecode の dir / ext を調整
+
+[project]
+name = "<your-project>"
+
+[graph]
+file = "docs/traceability/graph.toml"
+
+[matrix]
+format = "markdown"
+file = "docs/traceability/matrix.md"
+section = "Traceability Matrix"
+
+[id]
+# 3 パート固定（legixy v3 仕様）
+pattern = "{type}-{area}-{seq}"
+area = "<YOUR-AREA>"
+seq_digits = 3
+
+[id.chain]
+# ICONIX チェーン本体。RB/SEQ は抽象側(RBA/SEQA)と具体側(RBD/SEQD)に二段化。
+# SPEC/QSET/SPP/FCR/TP/GAP/AT/NFR/ADR/VAL は independent。
+order = ["UC", "RBA", "SEQA", "RBD", "SEQD", "DD", "TS", "TC", "SRC"]
+independent = ["SPEC", "TP", "GAP", "ADR", "AT", "NFR", "VAL", "QSET", "SPP", "FCR", "RPC"]
+
+[id.document_id]
+# Document ID 検出パターン（ファイル先頭の `Document ID: {ID}` 行を識別）
+pattern = "Document ID:"
+
+# ============================================
+# chain 内 typecode（既定 8 種）
+# ============================================
+
+[id.types.SPEC]
+dir = "docs/specs/"
+ext = ".md"
+file_pattern = "prefix"
+
+[id.types.UC]
+dir = "docs/usecases/"
+ext = ".md"
+file_pattern = "prefix"
+
+[id.types.RBA]
+# 抽象ロバストネス図(ドメインレベル、Boundary/Control/Entity 役割識別)
+dir = "docs/robustness-abstract/"
+ext = ".md"
+file_pattern = "prefix"
+
+[id.types.SEQA]
+# 抽象シーケンス図(ドメイン主語間の交互作用)
+dir = "docs/sequence-abstract/"
+ext = ".md"
+file_pattern = "prefix"
+
+[id.types.RBD]
+# 具体ロバストネス図(クラス図レベル、操作名は人間の言語まで)
+dir = "docs/robustness-detail/"
+ext = ".md"
+file_pattern = "prefix"
+
+[id.types.SEQD]
+# 具体シーケンス図(クラスインスタンス間メッセージング)
+dir = "docs/sequence-detail/"
+ext = ".md"
+file_pattern = "prefix"
+
+[id.types.DD]
+dir = "docs/detailed-design/"
+ext = ".md"
+file_pattern = "prefix"
+
+[id.types.TS]
+dir = "docs/test-specs/"
+ext = ".md"
+file_pattern = "prefix"
+
+[id.types.TC]
+# TC のディレクトリ・拡張子は採用言語に応じて変更:
+#   Rust:       dir="tests/",        ext=".rs"
+#   TypeScript: dir="tests/",        ext=".ts"
+#   Python:     dir="tests/",        ext=".py"
+#   C#:         dir="tests/",        ext=".cs"
+dir = "tests/"
+ext = ".rs"
+file_pattern = "contains"
+
+[id.types.SRC]
+# SRC のディレクトリ・拡張子は採用言語に応じて変更:
+#   Rust:       dir="src/",          ext=".rs"
+#   TypeScript: dir="src/",          ext=".ts"
+#   Python:     dir="src/",          ext=".py"
+#   C#:         dir="src/",          ext=".cs"
+dir = "src/"
+ext = ".rs"
+file_pattern = "contains"
+
+# ============================================
+# 独立 typecode
+# ============================================
+
+[id.types.TP]
+dir = "docs/test-perspectives/"
+ext = ".md"
+file_pattern = "prefix"
+
+[id.types.GAP]
+dir = "docs/gap-analysis/"
+ext = ".md"
+file_pattern = "prefix"
+
+[id.types.ADR]
+dir = "docs/adr/"
+ext = ".md"
+file_pattern = "prefix"
+
+[id.types.AT]
+dir = "docs/acceptance-tests/"
+ext = ".md"
+file_pattern = "prefix"
+
+[id.types.NFR]
+dir = "docs/nfr/"
+ext = ".md"
+file_pattern = "prefix"
+
+[id.types.VAL]
+dir = "docs/validation/"
+ext = ".md"
+file_pattern = "prefix"
+
+[id.types.RPC]
+# Responsibility Preservation Check: 抽象責務(RBA/SEQA)→ 具体責務(RBD/SEQD)の保存性検査(v1.0)
+# 親子関係(対象 UC / RBA / SEQA / RBD / SEQD)は本文 metadata で管理。詳細は 11-responsibility-preservation-check.md。
+dir = "docs/responsibility-preservation/"
+ext = ".md"
+file_pattern = "prefix"
+
+# ============================================
+# 前段ループ用 typecode（QSET / SPP / FCR）
+# Raw SPEC → 前段ループ → Accepted SPEC の正規化過程で発生する成果物。
+# 親子関係（QSET → SPEC, SPP → QSET, FCR → SPEC）は本文 metadata で管理。
+# ============================================
+
+[id.types.QSET]
+# Questionnaire Set: AI が SPEC から不足・曖昧・矛盾を検出して生成した質問票
+dir = "docs/frontend-pass/questionnaires/"
+ext = ".md"
+file_pattern = "prefix"
+
+[id.types.SPP]
+# SPEC Patch Proposal: 開発者の回答を反映した SPEC 差分案
+dir = "docs/spec-patches/"
+ext = ".md"
+file_pattern = "prefix"
+
+[id.types.FCR]
+# Frontend Check Result: フロントエンド検証結果。frontend_status を保持。
+# SPEC が UC/TP 着手可能か否かは、当該 SPEC を親に持つ最新 FCR の status が ACCEPTED かで判定される。
+dir = "docs/frontend-pass/check-results/"
+ext = ".md"
+file_pattern = "prefix"
+
+# 必要なら境界 API IDL を独立 typecode として追加
+# [id.types.IDL]
+# dir = "docs/idl/"
+# ext = ".md"
+# file_pattern = "prefix"
+
+# ============================================
+# semantic（第 2 層）— ONNX モデル必須
+# ============================================
+
+[semantic]
+enabled = false
+model = "all-MiniLM-L6-v2"
+similarity_threshold = 0.4
+drift_threshold = 0.3
+link_candidate_threshold = 0.7
+
+[contextual_retrieval]
+enabled = false
+
+[freshness]
+enabled = true
+method = "mtime"

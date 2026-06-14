@@ -1,0 +1,115 @@
+# CLAUDE.md (Author モード)
+
+このプロジェクトは **品質偏向防止を第一目的とする AI コンパイラ運用フレームワーク**(SCP)を採用している。
+
+**プロセスの詳細は `docs/SCP/README.md` を参照すること。** 本ファイルは AI が常時遵守すべき最低限の規律のみを記載する。
+
+> **モード分離**: このファイルは Author モード（生成・実装作業）向け。AI レビュアを起動する場合は `docs/SCP/bootstrap/CLAUDE-reviewer.md.template` を CLAUDE.md として配置する。両モードを 1 セッションで兼務しない（判定の独立性を守るため）。
+
+> **第一目的**: 確率論的変換器(AI)を SPEC, UC からのソフトウェアコンパイラとして採用する開発プロセスは、品質最大化ではなく **品質偏向防止** を第一目的とする(`docs/SCP/00-philosophy.md` §1)。Author として生成するとき、出力 y は確率分布 P(y|x) からのサンプリングであり、左裾サンプル(分布の悪い領域)が出る可能性が常にある。これを防ぐのは AI 自身の「賢さ」ではなく、外側の構造(多重独立検証経路、確率分布外側からの観察、偏向パターンの事後蓄積)である。Author は自身の出力に過信せず、Reviewer 層と AT に検証を委ねる前提で動く。
+
+## チェーン順序（概念）
+
+```
+Raw SPEC → [前段ループ: QSET ⇄ SPP ⇄ FCR] → Accepted SPEC
+         → TP[SPEC] → GAP[SPEC] → UC → TP[UC] → GAP[UC]
+         → RBA → SEQA → RBD → SEQD → DD
+         → TS → TC[RED] → SRC → TC[GREEN]
+```
+
+**ICONIX 二段化**: RB/SEQ は抽象側(RBA/SEQA、ドメインレベル)と具体側(RBD/SEQD、クラス図レベル)に分離されている。両者とも言語非依存。言語固有要素(関数名、引数型、戻り型、`async fn`, `Result<T,E>` 等)は DD で初出。
+
+独立成果物: `QSET`, `SPP`, `FCR`（前段ループ）、`TP`, `GAP`（仕様レベル TDD）、`AT`（受け入れテスト）, `NFR`（非機能要件）, `ADR`（設計判断記録）, `VAL`（横断的妥当性確認）
+
+**実装上の注**: legixy v3 の `[id.chain] order` には `UC → RBA → SEQA → RBD → SEQD → DD → TS → TC → SRC` が入り、`SPEC / QSET / SPP / FCR / TP / GAP / AT / NFR / ADR / VAL` は `independent` として扱う。前段ループ（Raw SPEC ⇄ QSET ⇄ SPP ⇄ FCR）と SPEC レベル TDD ループ（SPEC ⇄ TP ⇄ GAP）は本文 metadata と `scripts/trace-check.sh` の grep ベースゲートで検証する。レイヤ汚染（具体側 RBD/SEQD への言語固有要素混入）は `scripts/trace-check.sh` の [5/5] で grep ベースで検証する。
+
+## ハードルール（常時適用）
+
+1. **SPEC の変更は人間承認が必要。** AI は提案する、人間が決定する。
+2. **GAP がクローズしないうちに次フェーズへ進まない。** GAP[SPEC] open のうちは UC 着手禁止。GAP[UC] open のうちは RBA 着手禁止。`bash scripts/trace-check.sh` がこれを機械検証する。
+3. **すべての成果物は親への参照を持つ。** chain 内成果物は legixy v3 の `check --formal` で、chain 外成果物（SPEC/QSET/SPP/FCR/TP/GAP/ADR/AT/NFR/VAL）は本文 metadata + `scripts/trace-check.sh` で検証する。
+4. **新しい成果物タイプは `.trace-engine.toml` 更新が先。** チェーンに無いタイプを勝手に作らない。新タイプ追加時は (a) typecode を `.trace-engine.toml` に追加、(b) ID を 3 パート（`{type}-<AREA>-NNN`）形式で命名、(c) ファイル先頭に `Document ID:` 行を必置、(d) `docs/traceability/graph.toml` の `[[nodes]]` に登録。
+5. **AT は終端ではなく独立した検証チャネル。** 仕様レベル TDD で原理的に検出不能な領域（暗黙知・ドメイン慣行・前提の不一致）専用。確率分布外側からの観察として位置付けられる(`docs/SCP/00-philosophy.md` §2.4)。
+6. **仕様書とテストコードは実装着手後に変更しない。** 実装がテストに合わせる。ただし不具合修正イベント(`/defect-fix`)・仕様変更イベント(`/spec-change`)を経由する上流ドキュメント修正は本ルールの対象外。
+7. **境界 API の契約は DD 段階で凍結する。** 凍結後の変更は次バージョンの SPEC 改訂として扱う。
+8. **テストが通らない実装はマージしない。**
+9. **SPEC は前段ループで FCR.frontend_status = ACCEPTED に到達していなければ TP[SPEC] / UC 着手禁止。** Raw SPEC を直接 TP/UC に流すのは旧プロセスの破綻パターンで、SPEC の不完備を下流が埋め合わせる原因となる。`bash scripts/trace-check.sh` がこれを機械検証する。スキップする場合は ADR で記録（詳細は `docs/SCP/03a-frontend-pass.md` §11）。
+10. **ICONIX 二段化レイヤ汚染禁止 + 三者整合性検証必須。** 抽象側 RBA/SEQA にはドメイン語彙のみ、具体側 RBD/SEQD には操作名(人間の言語)とクラス図表記まで。関数名(snake_case/camelCase 呼び出し)・引数具体型・戻り型・修飾子(`pub`, `async`)・crate/module 識別子(`tokio::`, `std::`)・言語固有ジェネリック型(`Result<T,E>`, `Vec<T>`, `Arc<Mutex<T>>`)は DD でのみ書く。`bash scripts/trace-check.sh` の [5/5] レイヤ汚染検査が grep ベースで違反を検出する。加えて抽象層 GREEN 確定には **Jacobson 流三者整合性(UC ⇄ RBA ⇄ SEQA)** と **ICONIX 流三者整合性(UC ⇄ RBA ⇄ SPEC)** の両検証が必要。詳細は `docs/SCP/04-iconix-layer.md`。
+11. **人間関与は SPEC と UC に限定する。** RBA 以降(SEQA, RBD, SEQD, DD, TS, TC, SRC)は AI 自律実行 + AI Reviewer 層 + AT の組み合わせで品質保証する。下流(RBA 以降)で「人間判断が必要」と感じた場合、それは多くの場合、上流(SPEC または UC)に GAP として遡って起票するべきパターンである。例外: 境界 API の凍結対象リスト承認(ハードルール 7)は人間必須として残るが、AI が凍結対象 API のリストを提示して人間が一括承認する形で運用する。詳細は `docs/SCP/guides/ai-collaboration.md` §1。
+
+## 新規 SPEC 受け取り時の起動条件
+
+**新規 SPEC（または改訂版 SPEC）を受け取ったとき、AI が最初にするべき作業は前段ループの起動である。** TP[SPEC] や UC の生成に直接着手してはならない。
+
+具体的な手順:
+
+1. SPEC を読み、必要項目テンプレート（`03a-frontend-pass.md` §3）に沿って内部で仮充填
+2. 不足・曖昧・矛盾・境界不明・例外未定義を検出
+3. 検出結果を QSET として発行（`docs/frontend-pass/questionnaires/QSET-<AREA>-NNN.md`）
+4. **人間の回答を待つ**（AI が回答を埋めてはならない）
+5. 回答を受けたら SPP を発行（`docs/spec-patches/SPP-<AREA>-NNN.md`）
+6. **人間の承認を待つ**
+7. 承認後、SPEC を更新してフロントエンド検証を実施
+8. FCR を発行（`docs/frontend-pass/check-results/FCR-<AREA>-NNN.md`）
+9. `frontend_status = NEEDS_QUESTIONNAIRE` なら 3 に戻る、`ACCEPTED` なら TP[SPEC] 着手可能
+
+詳細手順は `docs/SCP/03a-frontend-pass.md` 全体を参照。
+
+## 出力規律
+
+- AI が下流成果物（RB / SEQ / DD / TS / TC / SRC）を生成するとき、上流成果物の typecode-id を必ず引用元として記載すること。
+- AI は SPEC/UC レベルの変更を勝手に行わない。これらは人間の判断領域。
+- 不明点は人間に問い、推測で埋めない。「埋め合わせ」は旧プロセスでの破綻の主因。
+- **前段ループの QSET / SPP / FCR を勝手に書き換えない。**各反復は新規 ID で発行し、履歴を残す。
+
+## 検証コマンド
+
+フェーズ完了を主張する前に必ず以下を実行:
+
+```bash
+bash scripts/trace-check.sh
+# 内部で実行:
+#   1. legixy check --formal   （第 1 層: ID 形式・chain 整合・OrphanFile・IdRedefined）
+#   2. SPEC レベル TDD ゲート               （red TP / open GAP の grep 検査）
+#   3. 前段ループゲート                    （各 SPEC に対する最新 FCR の frontend_status 検査）
+```
+
+これが pass することが完了条件。第 2 層（semantic、ONNX モデル必須）は ONNX 配置時のみ別途実行:
+
+```bash
+legixy check    # オプションなしで第 1 層 + 第 2 層
+```
+
+詳細は `docs/SCP/06-trace-engine.md`、`docs/SCP/manual/legixy/manual.md` 参照。本物 v3 のバイナリ位置は `~/.local/bin/legixy`（v0.4.0-alpha4 以降）。
+
+## プロジェクト固有の補足
+
+このセクションには、本プロジェクト固有の注意事項を追記する:
+
+- area コード: `<AREA>`
+- 採用言語: <Rust / TypeScript / Python / C# / 他>
+- 採用テストフレームワーク: <cargo test + proptest / Vitest + fast-check / pytest + Hypothesis / xUnit + FsCheck>
+- 観点ナレッジベース: `docs/perspectives/core-perspectives.md`, `docs/perspectives/ux-perspectives.md`
+- ゲートスキップ記録: `docs/decisions/gate-skips.md`
+- 前段スキップ記録: `docs/adr/`（`ADR-<AREA>-NNN_frontend-pass-skip-<SPEC-ID>.md`）
+- ONNX モデル: `models/all-MiniLM-L6-v2/`（第 2 層 semantic を有効化する場合のみ）
+
+## 主要ドキュメントの参照表
+
+| 作業内容 | 参照先 |
+|---|---|
+| プロセス全体像 | `docs/SCP/01-overview.md` |
+| 成果物タイプと ID | `docs/SCP/02-typecodes.md` |
+| **前段ループ（Raw SPEC → Accepted SPEC）** | `docs/SCP/03a-frontend-pass.md` |
+| SPEC, UC, TP, GAP の作業 | `docs/SCP/03-spec-level-tdd.md` |
+| **RBA/SEQA/RBD/SEQD/DD の作業（ICONIX 二段化）** | `docs/SCP/04-iconix-layer.md` |
+| TS, TC, SRC の作業 | `docs/SCP/05-test-and-impl.md` |
+| legixy 操作 | `docs/SCP/06-trace-engine.md` |
+| AT, NFR の作業 | `docs/SCP/07-at-and-nfr.md` |
+| ゲート判定 | `docs/SCP/08-gates.md` |
+| **AI レビュア層の運用（Reviewer モードに切り替えるとき）** | `docs/SCP/review-guidelines/README.md` |
+| **Reviewer モード CLAUDE.md** | `docs/SCP/bootstrap/CLAUDE-reviewer.md.template` |
+| コンパイラ構造レンズ（別視点） | `docs/SCP/09-compiler-lens.md` |
+| 各成果物の雛形 | `docs/SCP/templates/` |
+| 観点ナレッジベース | `docs/perspectives/` |
+| 言語別ガイド | `docs/SCP/guides/language-stacks/<lang>.md` |

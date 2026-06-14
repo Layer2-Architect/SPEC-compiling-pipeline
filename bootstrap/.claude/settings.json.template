@@ -1,0 +1,84 @@
+{
+  "_comment": "SCP ローカル運用向け Claude Code settings template。プロジェクトルートの .claude/settings.json として配置する。詳細は docs/SCP/08-gates.md §17 を参照。",
+
+  "hooks": {
+    "_comment_PreToolUse": "品質基準ファイルへの書き込みを deterministic に block する。AI 同士が結託して基準を緩めることを防ぐメタレベル安全弁（review-guidelines/severity.md §3）。",
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash scripts/guard-quality-baseline.sh \"$CLAUDE_FILE_PATH\""
+          }
+        ]
+      }
+    ],
+
+    "_comment_PostToolUse": "成果物書き込み後に trace-check.sh の軽量版を走らせて Document ID 漏れ等を早期検出。",
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash scripts/trace-check-light.sh \"$CLAUDE_FILE_PATH\" || true"
+          }
+        ]
+      }
+    ],
+
+    "_comment_SubagentStop": "Author subagent が完了した瞬間に Reviewer subagent を起動する経路。明示的な /advance を忘れにくくする。matcher は Author subagent の名前と一致させる。",
+    "SubagentStop": [
+      {
+        "matcher": "author",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '─── Author 完了。/advance <stage> で Reviewer subagent を起動してください ───'"
+          }
+        ]
+      },
+      {
+        "_comment": "Reviewer subagent が完了したら VERDICT を抽出して .scp/verdict.log に追記する。",
+        "matcher": "reviewer",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash scripts/extract-verdict.sh \"$CLAUDE_TRANSCRIPT_PATH\""
+          }
+        ]
+      }
+    ],
+
+    "_comment_SessionStart": "セッション起動時にハードルール一覧を毎回注入し直す。",
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "grep -A 50 '## ハードルール' docs/SCP/README.md | head -60 || true"
+          }
+        ]
+      }
+    ],
+
+    "_comment_Stop": "メインセッションの停止時に未消化の VERDICT があれば警告する。修正イベントのサイクル数も確認する (V3)。",
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash scripts/check-pending-verdict.sh || true"
+          },
+          {
+            "_comment": "V3: 修正イベントの 3 サイクル超過警告 (10-modification-events.md §6)",
+            "type": "command",
+            "command": "bash scripts/count-fix-cycle.sh > /dev/null || true"
+          }
+        ]
+      }
+    ]
+  }
+}

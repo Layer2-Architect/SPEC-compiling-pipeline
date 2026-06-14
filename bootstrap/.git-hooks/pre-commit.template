@@ -1,0 +1,45 @@
+#!/bin/bash
+# .git/hooks/pre-commit
+# SCP ローカル運用での deterministic ゲート起動。
+# commit 時に必ず trace-check.sh を走らせる。
+# 設置: cp bootstrap/.git-hooks/pre-commit.template .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+
+set -euo pipefail
+
+echo "─── pre-commit: trace-check.sh ───"
+
+# 機械検証層: chain 整合性、red TP、open GAP、レイヤ汚染を grep ベースで検出
+if ! bash scripts/trace-check.sh; then
+  echo ""
+  echo "✗ pre-commit: trace-check.sh が失敗しました。"
+  echo "  ハードルール違反、open GAP、red TP、レイヤ汚染のいずれかが残っています。"
+  echo "  修正してから再度 git commit してください。"
+  echo ""
+  echo "  bypass する場合: git commit --no-verify"
+  echo "  （ただし bypass は ADR で記録すること、docs/SCP/08-gates.md §14）"
+  exit 1
+fi
+
+# バグ修正 commit の場合、commit message に Recurrence: ヘッダがあるか検査
+# (perspectives.md の [Recurrence] 観点、PR description の代替)
+COMMIT_MSG_FILE="${1:-.git/COMMIT_EDITMSG}"
+if [ -f "$COMMIT_MSG_FILE" ]; then
+  FIRST_LINE=$(head -1 "$COMMIT_MSG_FILE")
+  # fix: で始まる commit message のみ Recurrence: 必須
+  if echo "$FIRST_LINE" | grep -qE "^(fix|hotfix|bugfix):"; then
+    if ! grep -qE "^Recurrence:" "$COMMIT_MSG_FILE"; then
+      echo ""
+      echo "✗ pre-commit: fix commit に Recurrence: ヘッダがありません。"
+      echo "  commit message の footer に以下のいずれかを追加してください:"
+      echo "    Recurrence: trace-check に追加"
+      echo "    Recurrence: perspectives 昇格"
+      echo "    Recurrence: ガイドライン追加"
+      echo "    Recurrence: ADR で例外として記録"
+      echo "    Recurrence: 何もしない（理由を明記）"
+      exit 1
+    fi
+  fi
+fi
+
+echo "✓ pre-commit: 機械検証 pass"
+exit 0

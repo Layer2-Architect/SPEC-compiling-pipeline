@@ -1,0 +1,52 @@
+workdir: /tmp/scp-ma-spike.WmCve6
+==================== traceability-engine --version ====================
+traceability-engine 0.4.0-alpha4
+
+==================== [陽性] check --formal（連結時、3-area） ====================
+
+$ traceability-engine --project-root $WORK check --formal
+
+Summary: 0 OK, 0 INFO, 0 WARNING, 0 ERROR
+exit=0
+
+==================== impact CTR-CLI-001（契約→binary 全走査） ====================
+
+$ traceability-engine --project-root $WORK impact CTR-CLI-001
+CTR-CLI-001 (type=CTR, depth=0, path=docs/contracts/CTR-CLI-001.md)
+DLV-CLI-001 (type=DLV, depth=1, path=docs/delivery-design/DLV-CLI-001.md)
+TS-CLI-001 (type=TS, depth=2, path=docs/test-specs/TS-CLI-001.md)
+TC-CLI-001 (type=TC, depth=3, path=docs/test-code/TC-CLI-001.md)
+SRC-CLI-001 (type=SRC, depth=4, path=docs/src-anchor/SRC-CLI-001.md)
+Summary: visited=5
+exit=0
+
+==================== investigate SRC-CLI-001（binary→契約 逆引き） ====================
+
+$ traceability-engine --project-root $WORK investigate SRC-CLI-001
+SRC-CLI-001 (type=SRC, depth=0, path=docs/src-anchor/SRC-CLI-001.md)
+TC-CLI-001 (type=TC, depth=1, path=docs/test-code/TC-CLI-001.md)
+TS-CLI-001 (type=TS, depth=2, path=docs/test-specs/TS-CLI-001.md)
+DLV-CLI-001 (type=DLV, depth=3, path=docs/delivery-design/DLV-CLI-001.md)
+CTR-CLI-001 (type=CTR, depth=4, path=docs/contracts/CTR-CLI-001.md)
+Suspicious nodes (drift_threshold=0.3):
+Summary: visited=5, suspicious=0
+exit=0
+
+==================== [陰性/F2] 配送エッジ DLV-CLI→TS-CLI を削除 ====================
+（DLV-CLI-001→TS-CLI-001 を削除。TS/TC/SRC-CLI が上流未連結になるはず）
+
+$ traceability-engine --project-root $WORK check --formal
+[WARNING] ChainIntegrity: 'TS-CLI-001' の上流 'CTR-CLI-001' が chain エッジで連結されていません [related_ids: TS-CLI-001, CTR-CLI-001]
+[WARNING] ChainIntegrity: 'TS-CLI-001' の上流 'DLV-CLI-001' が chain エッジで連結されていません [related_ids: TS-CLI-001, DLV-CLI-001]
+[WARNING] ChainIntegrity: 'TC-CLI-001' の上流 'CTR-CLI-001' が chain エッジで連結されていません [related_ids: TC-CLI-001, CTR-CLI-001]
+[WARNING] ChainIntegrity: 'TC-CLI-001' の上流 'DLV-CLI-001' が chain エッジで連結されていません [related_ids: TC-CLI-001, DLV-CLI-001]
+[WARNING] ChainIntegrity: 'SRC-CLI-001' の上流 'CTR-CLI-001' が chain エッジで連結されていません [related_ids: SRC-CLI-001, CTR-CLI-001]
+[WARNING] ChainIntegrity: 'SRC-CLI-001' の上流 'DLV-CLI-001' が chain エッジで連結されていません [related_ids: SRC-CLI-001, DLV-CLI-001]
+
+Summary: 0 OK, 0 INFO, 6 WARNING, 0 ERROR
+exit=0
+
+>>> F2 の要点: 上の check --formal は ChainIntegrity WARNING を出すが exit=0。
+>>> すなわち check --formal 単独ではゲートにならない。ラッパが WARNING を grep して RED 化する必要がある。
+
+workdir 保持: /tmp/scp-ma-spike.WmCve6 （確認後 rm -rf 可）
