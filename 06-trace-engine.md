@@ -2,7 +2,9 @@
 
 このドキュメントは legixy v3 を実行・設定するときに参照する。
 
-ツール本体は別配布: `~/.local/bin/legixy`（v0.4.0-alpha4 以降）。本フレームワークはlegixy を前提とする（grep-only fallback は提供しない）。
+> **ツール名について（重要）**: `legixy` は本フレームワーク（SCP）が用いるトレーサビリティエンジンの名称である。**SCP の開発時点ではこのツールは `traceability-engine`（v3 / v0.4.0-alpha4）として実装されており、公開にあたり `legixy` へ改称・再構築している。** 本書および本フレームワークの文書はすべて新名称 `legixy` で記述するが、**現在配布されている実バイナリ名は `traceability-engine` の場合がある**（両者は同一の実体）。`spikes/` 配下の再現スクリプト／トランスクリプトは、実行・記録時点の実バイナリ名 `traceability-engine` をそのまま保持している。
+
+ツール本体は別配布: `~/.local/bin/legixy`（v0.4.0-alpha4 以降。現行配布の実バイナリ名は `traceability-engine` の場合がある）。本フレームワークはlegixy を前提とする（grep-only fallback は提供しない）。
 
 詳細仕様は `manual/legixy/manual.md` を参照（公式マニュアルのコピー）。本ドキュメントは本フレームワーク運用上の最低限のサマリ。
 

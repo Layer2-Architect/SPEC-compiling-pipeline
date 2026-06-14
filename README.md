@@ -26,7 +26,7 @@
 docs/SCP/
 ├── README.md                   # 本ファイル（入口）
 ├── TESTBED-USAGE.md            # テストベッドとしての運用ガイド・観察ログ手順
-├── 00-philosophy.md            # 品質偏向防止を第一目的とする設計原理(設計原理)
+├── 00-philosophy.md            # 品質偏向防止を第一目的とする設計原理
 ├── 01-overview.md              # 全体像・4 層構造・観察可能化
 ├── 02-typecodes.md             # 成果物タイプコード一覧・ID 規則
 ├── 03a-frontend-pass.md        # 前段ループ（Raw SPEC → Accepted SPEC の正規化）= 入力分布の狭隘化(00 §2.1)
@@ -122,7 +122,7 @@ docs/SCP/
 
 新規プロジェクトに本プロセスを導入する手順は以下。詳細は `guides/adoption-phases.md` を参照。
 
-1. **ツール設置**: `legixy` v3（v0.4.0-alpha4 以降）を `~/.local/bin/` 等に配置。
+1. **ツール設置**: `legixy` v3（v0.4.0-alpha4 以降）を `~/.local/bin/` 等に配置。なお `legixy` は SCP の開発時に `traceability-engine` として実装されたツールを改称・再構築したもので、現行配布の実バイナリ名は `traceability-engine` の場合がある（同一の実体。詳細は `06-trace-engine.md`）。
 2. **ディレクトリ初期化**: `bootstrap/init-tree.sh` を実行 or 手動で `docs/{specs,frontend-pass/questionnaires,frontend-pass/check-results,spec-patches,usecases,test-perspectives,gap-analysis,robustness,sequence,detailed-design,test-specs,acceptance-tests,nfr,adr,validation,responsibility-preservation,traceability,perspectives}/` を作成。
 3. **設定ファイル配置**:
    - `.trace-engine.toml` ← `bootstrap/trace-engine.toml.template`（`area` を自プロジェクト 3 文字に置換）
