@@ -29,6 +29,14 @@ seq_digits = 3
 order = ["UC", "RBA", "SEQA", "RBD", "SEQD", "DD", "TS", "TC", "SRC"]
 independent = ["SPEC", "TP", "GAP", "ADR", "AT", "NFR", "VAL", "QSET", "SPP", "FCR", "RPC", "PAI"]
 
+# 配送軸チェーン（任意・12-delivery-layer.md）。外部公開サーフェス（CLI/API/MCP/ファイル形式 等）を持つ
+# プロジェクトで有効化する。CTR を根に CTR → DLV → TS → TC → SRC を「1 サーフェス = 1 チェーン」として定義
+# （ID は CTR-<SURFACE>-NNN、例 CTR-CLI-001）。複数サーフェスは [[id.chains]] を複数並べる。PAI は配送物を
+# 独立検査する成果物として independent に置く。
+# [[id.chains]]
+# order = ["CTR", "DLV", "TS", "TC", "SRC"]
+# independent = ["ADR", "PAI"]
+
 [id.document_id]
 # Document ID 検出パターン（ファイル先頭の `Document ID: {ID}` 行を識別）
 pattern = "Document ID:"
@@ -171,6 +179,22 @@ file_pattern = "prefix"
 # Frontend Check Result: フロントエンド検証結果。frontend_status を保持。
 # SPEC が UC/TP 着手可能か否かは、当該 SPEC を親に持つ最新 FCR の status が ACCEPTED かで判定される。
 dir = "docs/frontend-pass/check-results/"
+ext = ".md"
+file_pattern = "prefix"
+
+# ============================================
+# 配送軸 typecode（CTR / DLV）— 12-delivery-layer.md
+# 外部公開サーフェスの凍結境界契約(CTR=配送軸チェーンの根)と dispatch 設計(DLV=CTR の子)。
+# 上記 [[id.chains]] で CTR → DLV → TS → TC → SRC として使う。
+# ============================================
+
+[id.types.CTR]
+dir = "docs/contracts/"
+ext = ".md"
+file_pattern = "prefix"
+
+[id.types.DLV]
+dir = "docs/delivery-design/"
 ext = ".md"
 file_pattern = "prefix"
 

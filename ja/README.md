@@ -127,7 +127,7 @@ docs/SCP/
 新規プロジェクトに本プロセスを導入する手順は以下。詳細は `guides/adoption-phases.md` を参照。
 
 1. **ツール設置**: `legixy` v3（v0.4.0-alpha4 以降）を `~/.local/bin/` 等に配置。なお `legixy` は SCP の開発時に `traceability-engine` として実装されたツールを改称・再構築したもので、現行配布の実バイナリ名は `traceability-engine` の場合がある（同一の実体。詳細は `06-trace-engine.md`）。
-2. **ディレクトリ初期化**: `bootstrap/init-tree.sh` を実行 or 手動で `docs/{specs,frontend-pass/questionnaires,frontend-pass/check-results,spec-patches,usecases,test-perspectives,gap-analysis,robustness,sequence,detailed-design,test-specs,acceptance-tests,nfr,adr,validation,responsibility-preservation,product-acceptance,traceability,perspectives}/` を作成。
+2. **ディレクトリ初期化**: `bootstrap/init-tree.sh` を実行 or 手動で `docs/{specs,frontend-pass/questionnaires,frontend-pass/check-results,spec-patches,usecases,test-perspectives,gap-analysis,robustness,sequence,detailed-design,test-specs,acceptance-tests,nfr,adr,validation,responsibility-preservation,product-acceptance,contracts,delivery-design,traceability,perspectives}/` を作成。
 3. **設定ファイル配置**:
    - `.trace-engine.toml` ← `bootstrap/trace-engine.toml.template`（`area` を自プロジェクト 3 文字に置換）
    - `docs/traceability/graph.toml` ← `bootstrap/graph.toml.template`
