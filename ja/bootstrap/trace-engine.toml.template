@@ -27,7 +27,7 @@ seq_digits = 3
 # ICONIX チェーン本体。RB/SEQ は抽象側(RBA/SEQA)と具体側(RBD/SEQD)に二段化。
 # SPEC/QSET/SPP/FCR/TP/GAP/AT/NFR/ADR/VAL は independent。
 order = ["UC", "RBA", "SEQA", "RBD", "SEQD", "DD", "TS", "TC", "SRC"]
-independent = ["SPEC", "TP", "GAP", "ADR", "AT", "NFR", "VAL", "QSET", "SPP", "FCR", "RPC"]
+independent = ["SPEC", "TP", "GAP", "ADR", "AT", "NFR", "VAL", "QSET", "SPP", "FCR", "RPC", "PAI"]
 
 [id.document_id]
 # Document ID 検出パターン（ファイル先頭の `Document ID: {ID}` 行を識別）
@@ -139,6 +139,13 @@ file_pattern = "prefix"
 # Responsibility Preservation Check: 抽象責務(RBA/SEQA)→ 具体責務(RBD/SEQD)の保存性検査(v1.0)
 # 親子関係(対象 UC / RBA / SEQA / RBD / SEQD)は本文 metadata で管理。詳細は 11-responsibility-preservation-check.md。
 dir = "docs/responsibility-preservation/"
+ext = ".md"
+file_pattern = "prefix"
+
+[id.types.PAI]
+# Product Acceptance Inspection: ビルド済み完成品を Author と独立に・黒箱で・実環境で凍結契約(CTR)/SPEC へ適合検査(v1.0)
+# 親子関係(対象成果物 / 対象契約 CTR / SPEC)は本文 metadata で管理。詳細は 13-product-acceptance-inspection.md。
+dir = "docs/product-acceptance/"
 ext = ".md"
 file_pattern = "prefix"
 

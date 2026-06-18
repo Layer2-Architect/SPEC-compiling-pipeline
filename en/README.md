@@ -36,6 +36,7 @@ example (the author's product, anonymized as `APP`) is collected under
 | 10 — Modification events | ⏳ | [`../ja/10-modification-events.md`](../ja/10-modification-events.md) |
 | 11 — Responsibility-preservation check | ⏳ | [`../ja/11-responsibility-preservation-check.md`](../ja/11-responsibility-preservation-check.md) |
 | 12 — Delivery layer | ⏳ | [`../ja/12-delivery-layer.md`](../ja/12-delivery-layer.md) |
+| 13 — Product acceptance inspection (PAI) | ⏳ | [`../ja/13-product-acceptance-inspection.md`](../ja/13-product-acceptance-inspection.md) |
 | templates / guides / review-guidelines / perspectives / appendix / bootstrap | ⏳ | [`../ja/`](../ja/) |
 
 ✅ translated · ⏳ pending (read the Japanese edition for now)
@@ -84,6 +85,7 @@ docs/SCP/
 ├── 10-modification-events.md   # modification-event flow (spec-change / defect-fix / spec-add / new)
 ├── 11-responsibility-preservation-check.md  # abstract→concrete responsibility-preservation check (RPC)
 ├── 12-delivery-layer.md        # delivery layer (CLI/API/MCP contract surface): CTR/DLV/multi-area/conformance gate
+├── 13-product-acceptance-inspection.md  # product acceptance inspection (PAI): author-independent black-box conformance of the finished product
 ├── templates/                  # Markdown templates per artifact
 ├── review-guidelines/          # operating discipline for the AI reviewer layer
 ├── bootstrap/                  # new-project initialization kit

@@ -31,6 +31,7 @@ DIRS=(
   "docs/adr"
   "docs/validation"
   "docs/responsibility-preservation"
+  "docs/product-acceptance"
   "docs/traceability"
   "docs/perspectives"
   "docs/decisions"

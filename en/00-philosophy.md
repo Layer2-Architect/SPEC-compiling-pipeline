@@ -183,6 +183,7 @@ The methodologies this process juxtaposes:
 | AI-antipattern catalog | AI-specific blind spots | This process |
 | 9-perspective AI reviewer layer | Between machine verification and human judgment | This process |
 | Delivery-axis contract conformance (CTR/DLV/TC[DLV]) | External exposure of a function = conformance to a frozen boundary contract | This process (v1.0, [`../ja/12-delivery-layer.md`](../ja/12-delivery-layer.md)) |
+| Product acceptance inspection (PAI) | The finished product inspected for conformance to the contract/SPEC — independently of the author, black-box, in the real environment | This process (v1.0, [`../ja/13-product-acceptance-inspection.md`](../ja/13-product-acceptance-inspection.md)) |
 
 These are not a "grab bag of best practices" but an arrangement in which each methodology's blind
 spot is structurally covered by another:
@@ -197,6 +198,12 @@ spot is structurally covered by another:
   CLI/API/MCP does not surface under functional GREEN) → the delivery axis's TC[DLV] real-binary E2E
   plus the structural WARN-escalate gate force independent verification (v1.0,
   [`../ja/12-delivery-layer.md`](../ja/12-delivery-layer.md))**
+- **The blind spot of TC (including TC[DLV]) (because it is written in the same distribution as the
+  author, contract violations the author did not anticipate are likewise overlooked) → product
+  acceptance inspection (PAI) discovers unknown non-conformance as a black-box inspection by a subject
+  independent of the Author (v1.0, [`../ja/13-product-acceptance-inspection.md`](../ja/13-product-acceptance-inspection.md)).
+  Empirical basis: even with the whole chain GREEN, 54 contract violations remained, and only the
+  independent black-box inspection caught them**
 
 Hard Rule 10 (no ICONIX two-tier layer contamination + mandatory three-party consistency check) is a
 constraint that preserves the structure of the multiple independent verification paths.
@@ -218,6 +225,17 @@ refined the AI reviewer layer becomes, AT cannot be omitted.
 
 Problems found in AT are recorded as GAP[UC] / GAP[SPEC] and promoted to new perspectives in
 `perspectives.md` (§2.5).
+
+**However, AT's reach is limited to UX, tacit knowledge, and mismatched assumptions, and it presumes
+that "functional correctness and contract conformance are already assured by TC."** This premise does
+not necessarily hold, because TC (including TC[DLV]) is written in the *same distribution as the
+author* and thus inherits the author's blind spots (demonstrated: even with the whole chain GREEN, 54
+contract violations remained). So v1.0 adds **PAI (product acceptance inspection,
+[`../ja/13-product-acceptance-inspection.md`](../ja/13-product-acceptance-inspection.md))** as a path
+that inspects **the contract/functional conformance of the finished product** independently, from
+outside the distribution. What AT does for UX — "observation from outside the distribution,
+independent of the author" — PAI does for **the contract/functional conformance of the finished
+product**. AT and PAI are both indispensable and do not substitute for each other.
 
 ### 2.5 After-the-Fact Accumulation of Bias Patterns — ai-antipattern.md and Recurrence
 
