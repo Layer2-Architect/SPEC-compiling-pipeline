@@ -483,18 +483,28 @@ legixy check           # 第 2 層 semantic（ONNX モデル配置時のみ）
 
 - 全機能テスト・property テスト pass
 - NFR 要件全て pass
-- `bash scripts/trace-check.sh` pass（第 1 層 + SPEC レベル TDD ゲート）
+- `bash scripts/trace-check.sh` pass（第 1 層 + SPEC レベル TDD ゲート + **契約適合ゲート [TC[DLV] 実バイナリ E2E]**）
 - `legixy check` pass（第 2 層 semantic、ONNX モデル配置時のみ）
+
+### 完成品適合検査（PAI、v1.0。省略不可）
+
+- **Author と独立な主体（Reviewer 別セッション / 人間）が、ビルド済み完成品を黒箱・実環境で検査し、要改善ゼロ**
+  （`13-product-acceptance-inspection.md`）。
+- **ケースは SPEC から独立に作成**（下流チェーン・実装を見ない。CTR は表面）。**SPEC-REQ → PAI ケースの全数 mapping**
+  に未カバーがないこと。
+- PAI 失敗（要改善）はリリースをブロックし、**二段で戻す**: 症状＝/defect-fix（実装負け）or /spec-change（SPEC 欠陥）、
+  **構造＝「なぜ全チェーン GREEN を通過したか」のプロセス根本原因分析と SCP 改善**（PAI はプロセスの穴の検出器）。
+- PAI を TC[DLV]（in-repo 回帰ゲート）で代替しない（独立性＝発見力を保つ）。未実施でのリリースは ADR 記録が必要。
 
 ### AI レビュア層
 
-**Approve 権限**: なし（リリース判断は人間必須）
+**Approve 権限**: なし（リリース判断は人間必須。PAI 判定も Author 自己 Approve 不可）
 
 **主観点**:
 
-- `[Recurrence]`: AT 失敗が GAP[UC] / GAP[SPEC] として記録されているか、新観点が perspectives.md に昇格されているか
+- `[Recurrence]`: AT 失敗が GAP[UC] / GAP[SPEC] に、**PAI 失敗が /defect-fix・/spec-change に**記録されているか、新観点が perspectives.md に昇格されているか
 - `[Doc]`: AT 由来の新観点を perspectives.md に追記漏れがないか
-- `[Trace]`: AT 結果と GAP の対応関係の整合性
+- `[Trace]`: AT 結果と GAP の対応、**PAI 全数 mapping（契約↔ケース）**の整合性
 
 **返しうる VERDICT**:
 

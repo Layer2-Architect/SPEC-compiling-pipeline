@@ -192,7 +192,10 @@ SCP 変更後の legixy 適用手順（別フェーズ）:
 
 1. `LGX-COMPAT-001` を `CTR-CLI-001`（および MCP 分）として `docs/contracts/` へ昇格・graph 登録。
 2. `DLV-CLI-001`（dispatch 設計、機能 DD §8 を集約）作成。
-3. `TS-CLI-001`/`TC-CLI-001` = 契約 §7 チェックリストの実バイナリ E2E（既存の外部テストハーネスを in-repo 化）。
+3. `TS-CLI-001`/`TC-CLI-001` = 契約 §7 チェックリストの実バイナリ E2E。**ここで in-repo 化するのは外部テストの
+   「決定論サブセット＝回帰ゲート」のみ**であり、外部スイートそのものを畳んではならない。完全な独立黒箱検査は
+   **PAI（`13-product-acceptance-inspection.md`）として作者と独立な別チャネルに維持する**（in-repo 化＝独立性の喪失に
+   しないこと。同章 §6）。TC[DLV]＝既知契約の回帰防止 / PAI＝未知不適合の発見、という役割分担を保つ。
 4. `SRC-CLI-001` を `crates/legixy-cli/src/main.rs` に anchor（孤児解消）。MCP 分は `SRC-MCP-001` を `ts-mcp/src/index.ts` に。
 5. `.trace-engine.toml` を multi-area へ移行（§9）。
 6. `scripts/trace-check.sh` に契約適合ゲート（§7 の 4 ステージ）を追加。

@@ -40,6 +40,7 @@ docs/SCP/
 ├── 10-modification-events.md   # 修正イベントフロー（仕様変更/不具合修正/仕様追加/新規作成 の 4 イベント、共通中核、インクリメンタル再構築、3 サイクル警告）
 ├── 11-responsibility-preservation-check.md  # 抽象責務→具体責務 保存率検査(RPC)= 構造翻訳の不変条件強制(v1.0, 00 §2.2/§2.3)
 ├── 12-delivery-layer.md         # 配送層(契約サーフェス=CLI/API/MCP)をチェーン定置。CTR(境界契約・根)/DLV/multi-area/契約適合ゲート(v1.0, 機能軸と直交する配送軸)
+├── 13-product-acceptance-inspection.md  # 完成品適合検査(PAI)= 作者と独立な黒箱・実環境での完成品契約適合検査(v1.0, 00 §2.4。TC[DLV]=回帰 / PAI=発見)
 │
 ├── templates/                  # 各成果物の Markdown テンプレート
 │   ├── SPEC-template.md
@@ -63,7 +64,10 @@ docs/SCP/
 │   ├── NFR-template.md
 │   ├── ADR-template.md
 │   ├── VAL-template.md
-│   └── RPC-template.md         # 抽象責務→具体責務 保存率検査(v1.0)
+│   ├── RPC-template.md         # 抽象責務→具体責務 保存率検査(v1.0)
+│   ├── CTR-template.md         # 配送軸: 境界契約(根)(v1.0)
+│   ├── DLV-template.md         # 配送軸: 配送設計(v1.0)
+│   └── PAI-template.md         # 完成品適合検査(独立・黒箱・実環境)(v1.0)
 │
 ├── review-guidelines/         # AI レビュア層の運用規律
 │   ├── README.md               # 入口（9 観点 + severity + VERDICT の全体像）
@@ -139,6 +143,7 @@ docs/SCP/
 3. **すべての成果物は親への参照を持つ。** chain 内成果物は legixy v3 の `check --formal` で、chain 外成果物は本文 metadata + `scripts/trace-check.sh` で検証する。
 4. **新しい成果物タイプは `.trace-engine.toml` 更新が先。** チェーンに無いタイプを勝手に作らない。
 5. **AT は終端ではなく独立した検証チャネル。** 仕様レベル TDD で原理的に検出不能な領域（暗黙知・ドメイン慣行・前提の不一致）専用。確率分布外側からの観察として位置付けられる(`00-philosophy.md` §2.4)。
+5b. **完成品の契約適合は、作者と独立な黒箱検査 PAI で検証する。** 機能 GREEN（TC[DLV] 含む）は契約適合を意味しない（実証: 全チェーン GREEN でも契約違反 54 件）。リリース前に Author と独立な主体が完成品を実環境で黒箱検査する(`13-product-acceptance-inspection.md`)。AT（UX）と PAI（契約/機能）は別チャネルで相互に代替しない。
 6. **仕様書とテストコードは実装着手後に変更しない。** 実装がテストに合わせる。ただし不具合修正イベント(`/defect-fix`)・仕様変更イベント(`/spec-change`)を経由する上流ドキュメント修正は本ルールの対象外(`10-modification-events.md` §4.1.2)。
 7. **境界 API の契約は DD 段階で凍結する。** 凍結後の変更は次バージョンの SPEC 改訂として扱う。
 8. **テストが通らない実装はマージしない。**
