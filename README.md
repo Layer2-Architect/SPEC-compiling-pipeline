@@ -66,7 +66,7 @@ SCP はこれに対し、AI の内部チューニング（プロンプト・fine
 - **SCP** was developed internally as **"DevProc"** and renamed *SPEC Compiling Pipeline* for this
   public release. / SCP は内部では **「DevProc」** として開発され、公開にあたり *SPEC Compiling
   Pipeline* に改称しました。
-- **legixy** is the traceability engine SCP depends on. It was implemented as
+- **legixy** (<https://github.com/Layer2-Architect/legixy>) is the traceability engine SCP depends on. It was implemented as
   **`traceability-engine`** (v3 / `v0.4.0-alpha4`) during development and is being renamed/rebuilt
   as `legixy`; the currently distributed binary may still be named `traceability-engine` (same
   tool). / legixy は SCP が用いるトレーサビリティエンジン。開発時は **`traceability-engine`**

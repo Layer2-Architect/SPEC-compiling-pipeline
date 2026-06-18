@@ -20,4 +20,4 @@
 > SCP は実プロダクト開発の中で複数世代の反復（旧称 DevProc）を経て育てられ、
 > 本リリースで初めて汎用フレームワークとして再構成・公開された。
 
-[1.0.0]: https://github.com/<owner>/spec-compiling-pipeline/releases/tag/v1.0.0
+[1.0.0]: https://github.com/Layer2-Architect/SPEC-compiling-pipeline/releases/tag/v1.0.0
