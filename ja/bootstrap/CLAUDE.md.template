@@ -28,7 +28,7 @@ Raw SPEC → [前段ループ: QSET ⇄ SPP ⇄ FCR] → Accepted SPEC
 1. **SPEC の変更は人間承認が必要。** AI は提案する、人間が決定する。
 2. **GAP がクローズしないうちに次フェーズへ進まない。** GAP[SPEC] open のうちは UC 着手禁止。GAP[UC] open のうちは RBA 着手禁止。`bash scripts/trace-check.sh` がこれを機械検証する。
 3. **すべての成果物は親への参照を持つ。** chain 内成果物は legixy v3 の `check --formal` で、chain 外成果物（SPEC/QSET/SPP/FCR/TP/GAP/ADR/AT/NFR/VAL）は本文 metadata + `scripts/trace-check.sh` で検証する。
-4. **新しい成果物タイプは `.trace-engine.toml` 更新が先。** チェーンに無いタイプを勝手に作らない。新タイプ追加時は (a) typecode を `.trace-engine.toml` に追加、(b) ID を 3 パート（`{type}-<AREA>-NNN`）形式で命名、(c) ファイル先頭に `Document ID:` 行を必置、(d) `docs/traceability/graph.toml` の `[[nodes]]` に登録。
+4. **新しい成果物タイプは `.legixy.toml` 更新が先。** チェーンに無いタイプを勝手に作らない。新タイプ追加時は (a) typecode を `.legixy.toml` に追加、(b) ID を 3 パート（`{type}-<AREA>-NNN`）形式で命名、(c) ファイル先頭に `Document ID:` 行を必置、(d) `docs/traceability/graph.toml` の `[[nodes]]` に登録。
 5. **AT は終端ではなく独立した検証チャネル。** 仕様レベル TDD で原理的に検出不能な領域（暗黙知・ドメイン慣行・前提の不一致）専用。確率分布外側からの観察として位置付けられる(`docs/SCP/00-philosophy.md` §2.4)。
 6. **仕様書とテストコードは実装着手後に変更しない。** 実装がテストに合わせる。ただし不具合修正イベント(`/defect-fix`)・仕様変更イベント(`/spec-change`)を経由する上流ドキュメント修正は本ルールの対象外。
 7. **境界 API の契約は DD 段階で凍結する。** 凍結後の変更は次バージョンの SPEC 改訂として扱う。

@@ -17,7 +17,7 @@ mkdir -p "$WORK"/.trace-engine "$WORK"/docs/traceability \
   "$WORK"/docs/test-code "$WORK"/docs/src-anchor
 
 # --- 3-area config: LGX(機能) + CLI/MCP(配送) ---
-cat > "$WORK/.trace-engine.toml" <<'EOF'
+cat > "$WORK/.legixy.toml" <<'EOF'
 [project]
 name = "ma-spike"
 [graph]
@@ -176,7 +176,7 @@ for a in CLI MCP; do
 done
 
 # V3 marker（autodetect が V01 と誤認しないよう engine.db に user_version=3）
-python3 - "$WORK/.trace-engine/engine.db" <<'PY'
+python3 - "$WORK/.legixy/engine.db" <<'PY'
 import sqlite3,sys
 c=sqlite3.connect(sys.argv[1]); c.execute("PRAGMA user_version=3"); c.commit(); c.close()
 PY

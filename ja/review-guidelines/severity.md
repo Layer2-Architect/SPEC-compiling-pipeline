@@ -18,7 +18,7 @@
 - ハードルール 6 違反: 実装着手後に仕様書 / テストコードを書き換えている
 - ハードルール 9 違反: FCR が ACCEPTED でない SPEC に対して TP[SPEC] / UC が起票されている
 - ハードルール 10 違反: 抽象側に言語固有要素が混入、または三者整合性検証未実施
-- **品質基準そのものを緩める変更**: `.trace-engine.toml` の chain 順変更、ハードルールスキップ条件の緩和、`scripts/trace-check.sh` のチェック削除、perspectives.md からの観点削除
+- **品質基準そのものを緩める変更**: `.legixy.toml` の chain 順変更、ハードルールスキップ条件の緩和、`scripts/trace-check.sh` のチェック削除、perspectives.md からの観点削除
 - 「**埋め合わせ**」進行: 上流 GAP を起票せずに下流成果物を生成
 - ドキュメント不整合: コード変更に対する DD / SPEC / perspectives 更新漏れ
 
@@ -90,7 +90,7 @@ AI レビュアと AI 作者が同じ AI ベースで動くため、両者が結
 - `docs/SCP/` 配下の規定文書（00-philosophy.md, 01-overview.md, 08-gates.md など）の変更
 - `bootstrap/CLAUDE.md.template`, `CLAUDE-reviewer.md.template` の変更
 - `review-guidelines/` 配下の変更
-- `.trace-engine.toml` の `[id.chain]` セクション変更
+- `.legixy.toml` の `[id.chain]` セクション変更
 - `scripts/trace-check.sh` のチェック削除・条件緩和
 - `docs/perspectives/` 配下の観点削除（追加は OK）
 - ハードルール本体の文言変更
@@ -113,7 +113,7 @@ AI レビュアと AI 作者が同じ AI ベースで動くため、両者が結
 | 1 | SPEC の変更は人間承認が必要 | **Critical** | AI が SPEC を自律確定した形跡を `[AI-Antipattern]` で検出 |
 | 2 | GAP がクローズしないうちに次フェーズへ進まない | **Critical** | `trace-check.sh` のゲート、`[Spec-TDD]` で再検査 |
 | 3 | すべての成果物は親への参照を持つ | **Major** | `legixy check --formal`、`[Trace]` |
-| 4 | 新しい成果物タイプは `.trace-engine.toml` 更新が先 | **Major** | `[Trace]` |
+| 4 | 新しい成果物タイプは `.legixy.toml` 更新が先 | **Major** | `[Trace]` |
 | 5 | AT は終端ではなく独立した検証チャネル | **Critical**（混同時）| `[Recurrence]` |
 | 6 | 仕様書とテストコードは実装着手後に変更しない | **Critical** | `[AI-Antipattern]` |
 | 7 | 境界 API の契約は DD 段階で凍結する | **Critical** | `[Doc]`、API surface diff |

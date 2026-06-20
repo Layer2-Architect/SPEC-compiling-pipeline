@@ -93,11 +93,11 @@ for p in core-perspectives.md ux-perspectives.md; do
   fi
 done
 
-# .trace-engine.toml をコピー（存在しない場合のみ）
-if [[ ! -f ".trace-engine.toml" ]]; then
-  if [[ -f "docs/SCP/bootstrap/trace-engine.toml.template" ]]; then
-    cp "docs/SCP/bootstrap/trace-engine.toml.template" ".trace-engine.toml"
-    echo "  作成: .trace-engine.toml（テンプレートからコピー）"
+# .legixy.toml をコピー（存在しない場合のみ）
+if [[ ! -f ".legixy.toml" ]]; then
+  if [[ -f "docs/SCP/bootstrap/legixy.toml.template" ]]; then
+    cp "docs/SCP/bootstrap/legixy.toml.template" ".legixy.toml"
+    echo "  作成: .legixy.toml（テンプレートからコピー）"
     echo "    >>> 重要: <YOUR-AREA> と <your-project> を自プロジェクト用に置換してください"
   fi
 fi
@@ -167,7 +167,7 @@ fi
 
 echo ""
 echo "完了。次のステップ:"
-echo "  1. .trace-engine.toml の <YOUR-AREA> を自プロジェクトの area コードに置換"
+echo "  1. .legixy.toml の <YOUR-AREA> を自プロジェクトの area コードに置換"
 echo "  2. CLAUDE.md の <AREA> 等を置換"
 echo "  3. docs/perspectives/*.md に領域固有観点を追記"
 echo "  4. SPEC-<AREA>-001 を作成（templates/SPEC-template.md を参考に）"

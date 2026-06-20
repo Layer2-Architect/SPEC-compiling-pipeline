@@ -318,7 +318,7 @@ Work humans are directly involved in:
 - Approving ADRs
 - Release decisions
 - Firing and approving modification events (`/defect-fix`, `/spec-change`, `/spec-add`)
-- Final approval of quality-criterion changes (`review-guidelines/`, `.trace-engine.toml`, the
+- Final approval of quality-criterion changes (`review-guidelines/`, `.legixy.toml`, the
   hard-rule text)
 
 Work humans are *not* directly involved in:

@@ -69,7 +69,7 @@ AI レビュア。以下の作業をする:
 - `docs/SCP/` 配下の規定文書変更
 - `review-guidelines/` 配下の変更
 - `bootstrap/CLAUDE*.md.template` の変更
-- `.trace-engine.toml` の `[id.chain]` セクション変更
+- `.legixy.toml` の `[id.chain]` セクション変更
 - `scripts/trace-check.sh` のチェック削除・条件緩和
 - `docs/perspectives/` 配下の観点削除（追加は OK）
 - ハードルール本文の変更
@@ -162,7 +162,7 @@ AI レビュア。以下の作業をする:
 1. SPEC の変更は人間承認が必要
 2. GAP がクローズしないうちに次フェーズへ進まない
 3. すべての成果物は親への参照を持つ
-4. 新しい成果物タイプは `.trace-engine.toml` 更新が先
+4. 新しい成果物タイプは `.legixy.toml` 更新が先
 5. AT は終端ではなく独立した検証チャネル
 6. 仕様書とテストコードは実装着手後に変更しない
 7. 境界 API の契約は DD 段階で凍結する

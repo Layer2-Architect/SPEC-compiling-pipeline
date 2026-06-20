@@ -77,7 +77,7 @@ docs/SCP/
 │   └── verdict-marker.md       # VERDICT マーカー仕様
 │
 ├── bootstrap/                  # 新規プロジェクト初期化キット
-│   ├── trace-engine.toml.template
+│   ├── legixy.toml.template
 │   ├── graph.toml.template
 │   ├── trace-check.sh          # 前段ループゲート含む統合検証
 │   ├── init-tree.sh            # docs/ 配下のディレクトリと placeholder を作る
@@ -129,7 +129,7 @@ docs/SCP/
 1. **ツール設置**: `legixy` v3（v0.4.0-alpha4 以降）を `~/.local/bin/` 等に配置。なお `legixy` は SCP の開発時に `traceability-engine` として実装されたツールを改称・再構築したもので、現行配布の実バイナリ名は `traceability-engine` の場合がある（同一の実体。詳細は `06-trace-engine.md`）。
 2. **ディレクトリ初期化**: `bootstrap/init-tree.sh` を実行 or 手動で `docs/{specs,frontend-pass/questionnaires,frontend-pass/check-results,spec-patches,usecases,test-perspectives,gap-analysis,robustness,sequence,detailed-design,test-specs,acceptance-tests,nfr,adr,validation,responsibility-preservation,product-acceptance,contracts,delivery-design,traceability,perspectives}/` を作成。
 3. **設定ファイル配置**:
-   - `.trace-engine.toml` ← `bootstrap/trace-engine.toml.template`（`area` を自プロジェクト 3 文字に置換）
+   - `.legixy.toml` ← `bootstrap/legixy.toml.template`（`area` を自プロジェクト 3 文字に置換）
    - `docs/traceability/graph.toml` ← `bootstrap/graph.toml.template`
    - `scripts/trace-check.sh` ← `bootstrap/trace-check.sh`
    - `CLAUDE.md`（プロジェクトルート）← `bootstrap/CLAUDE.md.template`
@@ -141,7 +141,7 @@ docs/SCP/
 1. **SPEC の変更は人間承認が必要。** AI は提案する、人間が決定する。
 2. **GAP がクローズしないうちに次フェーズへ進まない。** GAP[SPEC] open のうちは UC 着手禁止。GAP[UC] open のうちは RBA 着手禁止。`bash scripts/trace-check.sh` がこれを機械検証する。
 3. **すべての成果物は親への参照を持つ。** chain 内成果物は legixy v3 の `check --formal` で、chain 外成果物は本文 metadata + `scripts/trace-check.sh` で検証する。
-4. **新しい成果物タイプは `.trace-engine.toml` 更新が先。** チェーンに無いタイプを勝手に作らない。
+4. **新しい成果物タイプは `.legixy.toml` 更新が先。** チェーンに無いタイプを勝手に作らない。
 5. **AT は終端ではなく独立した検証チャネル。** 仕様レベル TDD で原理的に検出不能な領域（暗黙知・ドメイン慣行・前提の不一致）専用。確率分布外側からの観察として位置付けられる(`00-philosophy.md` §2.4)。
 5b. **完成品の契約適合は、作者と独立な黒箱検査 PAI で検証する。** 機能 GREEN（TC[DLV] 含む）は契約適合を意味しない（実証: 全チェーン GREEN でも契約違反 54 件）。リリース前に Author と独立な主体が完成品を実環境で黒箱検査する(`13-product-acceptance-inspection.md`)。AT（UX）と PAI（契約/機能）は別チャネルで相互に代替しない。
 6. **仕様書とテストコードは実装着手後に変更しない。** 実装がテストに合わせる。ただし不具合修正イベント(`/defect-fix`)・仕様変更イベント(`/spec-change`)を経由する上流ドキュメント修正は本ルールの対象外(`10-modification-events.md` §4.1.2)。

@@ -7,7 +7,7 @@
 ```
 .
 ├── Cargo.toml
-├── .trace-engine.toml
+├── .legixy.toml
 ├── CLAUDE.md
 ├── docs/
 │   ├── SCP/                # フレームワーク本体
@@ -22,7 +22,7 @@
 └── benches/                    # NFR の測定コード
 ```
 
-`.trace-engine.toml` の TC / SRC 設定:
+`.legixy.toml` の TC / SRC 設定:
 
 ```toml
 [id.types.TC]

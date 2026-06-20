@@ -65,7 +65,7 @@ cp -r /path/to/SCP docs/SCP
 bash docs/SCP/bootstrap/init-tree.sh
 
 # AREA コード、プロジェクト名を置換
-sed -i 's/<YOUR-AREA>/TB1/g; s/<your-project>/scp-testbed/g' .trace-engine.toml
+sed -i 's/<YOUR-AREA>/TB1/g; s/<your-project>/scp-testbed/g' .legixy.toml
 sed -i 's/<AREA>/TB1/g' CLAUDE.md
 ```
 

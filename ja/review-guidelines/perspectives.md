@@ -138,7 +138,7 @@
 | severity | scope | 観点 |
 |---|---|---|
 | Critical | 全成果物 | **埋め合わせ進行**: 上流 GAP を起票せずに下流着手 |
-| Critical | 全成果物 | **基準書き換え**: ハードルール緩和、`.trace-engine.toml` chain 変更を提案 |
+| Critical | 全成果物 | **基準書き換え**: ハードルール緩和、`.legixy.toml` chain 変更を提案 |
 | Critical | SRC | **幻覚 API**: 存在しないメソッド呼び出し（`user.findOrCreate()` のような正しそうな未定義メソッド）|
 | Major | SRC | **エラー握り潰し**: 上流失敗を無言で空配列フォールバック |
 | Major | SRC | **scope creep**: 1 関数の修正依頼で同ファイル全体 reformat |

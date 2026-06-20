@@ -8,7 +8,7 @@
 .
 ├── package.json
 ├── tsconfig.json
-├── .trace-engine.toml
+├── .legixy.toml
 ├── CLAUDE.md
 ├── docs/...
 ├── scripts/trace-check.sh
@@ -19,7 +19,7 @@
 └── bench/                      // NFR 測定（vitest bench / tinybench）
 ```
 
-`.trace-engine.toml`:
+`.legixy.toml`:
 
 ```toml
 [id.types.TC]

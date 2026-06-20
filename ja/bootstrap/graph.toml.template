@@ -6,7 +6,7 @@
 # - `[[nodes]]` の type は必須（typecode 文字列）
 # - `[[edges]]` の kind は chain / parent_child / custom
 # - chain 内成果物（UC → RBA → SEQA → RBD → SEQD → DD → TS → TC → SRC）の親子関係は
-#   `.trace-engine.toml` の `[id.chain] order` から自動推測されるため、
+#   `.legixy.toml` の `[id.chain] order` から自動推測されるため、
 #   edges に書かなくてもよい
 # - chain 外成果物の関連（TP → SPEC, GAP → TP, ADR → SPEC など）は
 #   本文 metadata で管理する

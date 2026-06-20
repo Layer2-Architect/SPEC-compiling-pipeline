@@ -106,7 +106,7 @@ To adopt this process in a new project (details in
    tool — see [`../ja/06-trace-engine.md`](../ja/06-trace-engine.md)).
 2. **Initialize directories**: run `bootstrap/init-tree.sh`, or create the `docs/{...}/` tree
    manually.
-3. **Place config files**: `.trace-engine.toml`, `docs/traceability/graph.toml`,
+3. **Place config files**: `.legixy.toml`, `docs/traceability/graph.toml`,
    `scripts/trace-check.sh`, and root `CLAUDE.md` from the `bootstrap/` templates.
 4. **Place perspective bases**: copy `perspectives/*.md` into `docs/perspectives/` and append
    domain-specific perspectives.
@@ -122,7 +122,7 @@ To adopt this process in a new project (details in
    this mechanically.
 3. **Every artifact carries a reference to its parent.** On-chain artifacts are verified by legixy
    v3's `check --formal`; off-chain artifacts by in-body metadata + `scripts/trace-check.sh`.
-4. **A new artifact type requires updating `.trace-engine.toml` first.** Do not invent types not in
+4. **A new artifact type requires updating `.legixy.toml` first.** Do not invent types not in
    the chain.
 5. **AT is not a terminus but an independent verification channel.** It is dedicated to the domain
    that spec-level TDD cannot, in principle, detect (tacit knowledge, domain conventions, mismatched

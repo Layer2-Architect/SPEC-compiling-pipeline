@@ -19,7 +19,7 @@
 8. [MCP サーバーの設定](#8-mcp-サーバーの設定)
 9. [CLAUDE.md の運用ルール記述](#9-claudemd-の運用ルール記述)
 10. [運用フロー](#10-運用フロー)
-11. [設定リファレンス（.trace-engine.toml）](#11-設定リファレンス)
+11. [設定リファレンス（.legixy.toml）](#11-設定リファレンス)
 12. [v0.1.0 からの移行](#12-v010-からの移行)
 13. [トラブルシューティング](#13-トラブルシューティング)
 14. [ID 再定義検出（IdRedefined / IdSemanticMismatch / IdSemanticDrift、ISSUE-001）](#14-id-再定義検出idredefined--idsemanticmismatch--idsemanticdriftissue-001)
@@ -110,9 +110,9 @@
 1. `init` が生成するデフォルト template（ICONIX 8 typecode + `[id.chain]` 既定値）
 2. v0.1.0 → v3 migration のフォールバック既定値（`te-mig/src/matrix.rs`）
 
-### 2.5.2 非 ICONIX プロセスでの `.trace-engine.toml` 設定例
+### 2.5.2 非 ICONIX プロセスでの `.legixy.toml` 設定例
 
-init 直後に `.trace-engine.toml` の `[id.types.*]` と `[id.chain]` を書き換えるだけで、以下のプロセスを即座にサポート:
+init 直後に `.legixy.toml` の `[id.types.*]` と `[id.chain]` を書き換えるだけで、以下のプロセスを即座にサポート:
 
 #### Waterfall / RDD（Requirements-Driven Design）
 
@@ -209,14 +209,14 @@ file_pattern = "contains"
 # 1. init（ICONIX 既定テンプレート生成）
 legixy init
 
-# 2. .trace-engine.toml を編集してプロセスを置換
+# 2. .legixy.toml を編集してプロセスを置換
 #    [id.chain] と [id.types.*] を §2.5.2 の該当例で置き換え
 
 # 3. 必要に応じて不要なディレクトリを削除 / 新規ディレクトリを作成
 #    (init は ICONIX 10 ディレクトリを作成するが、使わないものは削除可)
 
 # 4. area を変更
-sed -i 's/area = "XX"/area = "MYPROJ"/' .trace-engine.toml
+sed -i 's/area = "XX"/area = "MYPROJ"/' .legixy.toml
 
 # 5. 検証動作確認
 legixy check --formal
@@ -243,10 +243,10 @@ legixy check --formal
 ┌─────────────────────────────────────────────────────────┐
 │  プロジェクトリポジトリ（v3）                               │
 │                                                           │
-│  .trace-engine.toml              ← 設定（両ツールが読む）   │
+│  .legixy.toml              ← 設定（両ツールが読む）   │
 │  docs/traceability/graph.toml    ← グラフ定義（一次データ） │
 │  docs/traceability/matrix.md     ← 派生ビュー（v0.1.0 互換）│
-│  .trace-engine/engine.db         ← SQLite WAL（統合 DB）   │
+│  .legixy/engine.db         ← SQLite WAL（統合 DB）   │
 │  models/all-MiniLM-L6-v2/        ← ONNX モデル（意味検証用）│
 │                                                           │
 │  ┌──────────────┐    ┌──────────────────────┐             │
@@ -272,7 +272,7 @@ legixy check --formal
 │         │◄──────────────────────┘                         │
 │         │                                                  │
 │         ▼                                                  │
-│  .trace-engine/engine.db (WAL + busy_timeout=5000ms)       │
+│  .legixy/engine.db (WAL + busy_timeout=5000ms)       │
 └───────────────────────────────────────────────────────────┘
 ```
 
@@ -395,13 +395,13 @@ legixy init
 
 生成されるファイル / ディレクトリ（v3、2026-04-20 INIT Block 反映版）:
 
-- `.trace-engine.toml` — 設定ファイル（**既定は ICONIX 8 typecode + `[id.document_id]` の完全 template**、最低限 `area = "XX"` のみ変更必要。**非 ICONIX プロセスの場合は §2.5 を参照して `[id.types.*]` と `[id.chain]` を書き換える**）
+- `.legixy.toml` — 設定ファイル（**既定は ICONIX 8 typecode + `[id.document_id]` の完全 template**、最低限 `area = "XX"` のみ変更必要。**非 ICONIX プロセスの場合は §2.5 を参照して `[id.types.*]` と `[id.chain]` を書き換える**）
 - `docs/traceability/graph.toml` — **グラフ定義テンプレート**（v3 新規、一次データ）
 - `docs/traceability/matrix.md` — 派生ビューテンプレート（v0.1.0 互換、手動管理）
 - **ICONIX 成果物 10 ディレクトリ**（既定）: `docs/{specs,usecases,robustness,sequence,detailed-design,test-specs,validation,traceability}/` + **`tests/`** + **`src/`**。非 ICONIX プロセスでは不要なディレクトリを削除し、新規ディレクトリを手動で作成（`[id.types.*].dir` の値と一致させる）
 - **9 箇所の `.gitkeep`**: 空ディレクトリの Git 追跡用（`docs/specs/.gitkeep` ... `docs/validation/.gitkeep` + `tests/.gitkeep` + `src/.gitkeep`）
-- `.trace-engine/` — engine.db 格納用（`.gitignore` 付き）
-- `.trace-engine/engine.db` — 初期化済 SQLite（WAL、全テーブル定義済、`PRAGMA user_version=3` マーカー書込み）
+- `.legixy/` — engine.db 格納用（`.gitignore` 付き）
+- `.legixy/engine.db` — 初期化済 SQLite（WAL、全テーブル定義済、`PRAGMA user_version=3` マーカー書込み）
 
 **init 直後の `check --formal` 挙動**（2026-04-20 INIT Block）:
 - `area = "XX"` 未変更 → Info 1 件「プロジェクト固有コードに変更してください」
@@ -427,7 +427,7 @@ legixy migrate --from /path/to/v0.1.0-project --dry-run
 
 移行で実行される処理:
 
-1. `.trace-engine.toml` を v0.1.0 → v3 形式に変換（`[graph]` セクション追加、`[contextual_retrieval]` デフォルト無効追加等）
+1. `.legixy.toml` を v0.1.0 → v3 形式に変換（`[graph]` セクション追加、`[contextual_retrieval]` デフォルト無効追加等）
 2. `matrix.md` → `graph.toml` 自動生成（`[[nodes]]` + `[[edges]]`）
 3. `feedback.db` → `engine.db` にテーブル copy（observations / proposals / custom_edges）
 4. `vectors.bin` → `embeddings` テーブルへ import（`ImportStrategy::Skip` がデフォルト、`BestEffort` で有効化）
@@ -436,7 +436,7 @@ legixy migrate --from /path/to/v0.1.0-project --dry-run
 
 ### 6.3 設定ファイルの編集
 
-`.trace-engine.toml` をプロジェクトに合わせて編集。詳細は [§11 設定リファレンス](#11-設定リファレンス) を参照。
+`.legixy.toml` をプロジェクトに合わせて編集。詳細は [§11 設定リファレンス](#11-設定リファレンス) を参照。
 
 ### 6.4 グラフの作成（v3 新規、graph.toml）
 
@@ -593,7 +593,7 @@ v3 の MCP サーバー（`traceability-mcp`）は **TypeScript（Node.js LTS）
 └─────────────────┘         └──────────────────────┘        └─────────┬──────────┘
                                                                        │
                                                                        ▼
-                                                           .trace-engine/engine.db
+                                                           .legixy/engine.db
 ```
 
 **設計原則（SPEC-TE-009）:**
@@ -859,7 +859,7 @@ Proposal を人間が判断
 
 ## 11. 設定リファレンス
 
-`.trace-engine.toml` の主要セクション（`init` 直後のテンプレート + 編集例）:
+`.legixy.toml` の主要セクション（`init` 直後のテンプレート + 編集例）:
 
 ```toml
 # [project].version は init テンプレートには含まれない（2026-04-20 事実確認）
@@ -942,7 +942,7 @@ cat docs/traceability/migration-id-map.toml  # 旧→新 ID マッピング
 legixy check --formal            # 形式検証
 
 # Step 6: Git commit（STATE-INV-2 運用ガイダンス）
-git add docs/traceability/ .trace-engine.toml
+git add docs/traceability/ .legixy.toml
 git commit -m "chore: migrate to legixy v3"
 ```
 
@@ -961,13 +961,13 @@ git commit -m "chore: migrate to legixy v3"
 
 ### Q1: `legixy check` で「ONNX モデルの読み込みに失敗」
 
-A: `models/<model-name>/` に `model.onnx` + `tokenizer.json` が配置されているか確認。`.trace-engine.toml` の `[semantic].model` が対応するディレクトリ名と一致しているか確認。
+A: `models/<model-name>/` に `model.onnx` + `tokenizer.json` が配置されているか確認。`.legixy.toml` の `[semantic].model` が対応するディレクトリ名と一致しているか確認。
 
 ### Q2: `migrate` が途中で失敗した
 
 A: `.bak` バックアップファイルが生成されている。手動で復元:
 ```bash
-mv .trace-engine.toml.bak .trace-engine.toml
+mv .legixy.toml.bak .legixy.toml
 mv docs/traceability/graph.toml.bak docs/traceability/graph.toml
 ```
 エラーメッセージを確認し、原因を特定してから再実行。
@@ -1100,8 +1100,8 @@ legixy --json check --formal
 | 2026-04-19 | 0.2.0 rev1 | MCP ブロック s1 完了で §8 を全面改訂。アーキテクチャ図、3 ツール詳細仕様（zod schema + 下位呼出 + 出力例）、Admin Surface 分離、v3 拡張まとめ、テスト実行・起動確認手順、トラブルシューティング Q8〜Q10 を追加。better-sqlite3 依存削除（REQ.05 ステートレス性）、Node.js LTS 固定（COMPAT.10）を明記 |
 | 2026-04-19 | **0.2.0 rev2（正式版）** | **v3 プロジェクト全 9 ブロック完成を反映**。MCP ブロック s2 実装 + adv1 Finding 0 件で一発 PASS + G3 通過を受け、ヘッダステータスを「全 9 ブロック完成、v3 v0.2.0 正式版」に昇格。テスト実測値を確定（Rust 223 passed + 16 ignored、TypeScript 13 passed + 2 skipped、skipIf は `RUN_STRESS` / `RUN_PERF` env で有効化）。§13 Q10 のログ記述から「s2 実装時に対応」を削除。§5.3 テストブロックを実測値ベースに更新 |
 | 2026-04-20 | **0.2.0 rev3** | **2026-04-20 の 4 追加 Block（INIT / SEM / RPT / CAL）完成を反映**。§2 に追加実装事項（SemanticChecker 本実装、init ICONIX 完全 template、report/calibrate 実装、`area="XX"` Info / `{id}` Warning）を追記、§5.3 テスト実測値を 253 passed + 19 ignored へ更新、§6.1 init 生成物を 10 ディレクトリ + 9 .gitkeep へ更新、§6.4 graph.toml サンプルに `type` フィールド追加、§6.5 `--json` 位置を修正（グローバルフラグ）、§7 検証系表に SemanticChecker / report / calibrate の新情報、§7 フィードバックループ表末尾に v0.1.0→v3 observe 移行注記、§9 に graph.toml 更新主体（手動編集前提、FS 監視なし）の事実記述、§10.4 パイプライン opt-in 運用説明を新設、§11 template の `version = "0.1.0"` 削除 + `[contextual_retrieval]` 注釈更新、§13 Q6 に新規 Info/Warning 追記、Q8-Q10 を番号順に並べ替え、Q11（FS イベント時のグラフ更新）・Q12（`--json` フラグ位置）を新規追加。`/sc:analyze` Finding 1 / Finding 3 / 事実確認調査（FS イベント → グラフ操作マッピング）の結果を一括反映 |
-| 2026-04-20 | 0.2.0 rev3.1 | **プロセス非依存性の明確化**（ユーザー問合せ「ICONIX でなくても使えるのか」への対応）。§2.5 新設「プロセス非依存性（ICONIX 以外でも使える）」— エンジン本体が process-agnostic である根拠、Waterfall/Agile/BDD の `.trace-engine.toml` 設定例、非 ICONIX 採用時の運用手順、`file_pattern` の 2 値説明、制限事項を記載。§6.1 init 生成物説明に「非 ICONIX プロセスの場合は §2.5 を参照」の誘導を追加。§9 CLAUDE.md サンプルの前書きに「ICONIX 想定の例」の明示を追加。SPEC-TE-008.REQ.07 と DD-TE-007 §3.1.1 の表現を「ICONIX 標準 template」から「既定は ICONIX、エンジン本体はプロセス非依存」に改訂 |
-| 2026-04-27 | **0.3.0** | **ISSUE-001 対応: ID 再定義検出機能（IdRedefined / IdSemanticMismatch）追加**。SPEC-TE-004 v0.4.0 で REQ.11 / REQ.12 を新設。§7 検証系表の `check --formal` カテゴリ列に IdRedefined / IdSemanticMismatch を追記。§13 Q6 に新規 Warning / Info の説明を追加。§11 を新設し「ID 再定義検出（IdRedefined / IdSemanticMismatch）」運用ガイドを記載。`.trace-engine.toml` に `[id_changelog]` / `[id_semantic_mismatch]` セクションを追加可能に（デフォルト OFF / 後方互換性維持）。テスト実測 50 passed for te-check（既存 39 + 新規 11） |
+| 2026-04-20 | 0.2.0 rev3.1 | **プロセス非依存性の明確化**（ユーザー問合せ「ICONIX でなくても使えるのか」への対応）。§2.5 新設「プロセス非依存性（ICONIX 以外でも使える）」— エンジン本体が process-agnostic である根拠、Waterfall/Agile/BDD の `.legixy.toml` 設定例、非 ICONIX 採用時の運用手順、`file_pattern` の 2 値説明、制限事項を記載。§6.1 init 生成物説明に「非 ICONIX プロセスの場合は §2.5 を参照」の誘導を追加。§9 CLAUDE.md サンプルの前書きに「ICONIX 想定の例」の明示を追加。SPEC-TE-008.REQ.07 と DD-TE-007 §3.1.1 の表現を「ICONIX 標準 template」から「既定は ICONIX、エンジン本体はプロセス非依存」に改訂 |
+| 2026-04-27 | **0.3.0** | **ISSUE-001 対応: ID 再定義検出機能（IdRedefined / IdSemanticMismatch）追加**。SPEC-TE-004 v0.4.0 で REQ.11 / REQ.12 を新設。§7 検証系表の `check --formal` カテゴリ列に IdRedefined / IdSemanticMismatch を追記。§13 Q6 に新規 Warning / Info の説明を追加。§11 を新設し「ID 再定義検出（IdRedefined / IdSemanticMismatch）」運用ガイドを記載。`.legixy.toml` に `[id_changelog]` / `[id_semantic_mismatch]` セクションを追加可能に（デフォルト OFF / 後方互換性維持）。テスト実測 50 passed for te-check（既存 39 + 新規 11） |
 | 2026-04-27 | 0.3.0 rev1 | **ISSUE-002 / ISSUE-003 / ISSUE-004 同時対応**。(1) ISSUE-002: `embedding_snapshots` テーブル + `snapshot create/list/delete` サブコマンド + `drift --against snapshot:LABEL` 追加。drift baseline の凍結・時系列観測が可能に。(2) ISSUE-003: `[semantic].vector_store` 廃止。`SemanticConfig` から削除、デフォルトテンプレートからも除去、旧設定検出時に Info 警告。(3) ISSUE-004: `calibrate --recommend` 追加、percentile（p10/p25/p50/p75/p90）ベースで 3 閾値の推奨値を出力。§12 を新設し「drift baseline / snapshot 運用」を記載 |
 | 2026-04-28 | **0.4.0-alpha1** | **TE-NEXT-EXT-001 Phase 2 Block A + Block D 実装**。(A) サブノード embedding 登録の実体化: `embed --all` のデフォルトでサブノード（h2/h3 自動抽出）も embedding し engine.db に格納。`embeddings` テーブルに `parent_id` / `anchor` / `is_subnode` カラム追加（既存 DB は ALTER TABLE 自動 migration）。サブノードは `Node.content_range` で切り出した部分テキストのみを入力にし、テンプレ寄与（ISSUE-005）を構造的排除。`[semantic].include_subnodes = false` で Phase 1 動作復帰可。SPEC-TE-006.REQ.09 を Phase 1 予約 → Phase 2 実装に格上げ、REQ.12 サブノード embedding 格納項目を新設。(D) graph.toml ドキュメントノードに `heading_levels` フィールド追加（既定 [2, 3]、明示で [2, 3, 4] 等カスタマイズ可、TE-NEXT-EXT-001 §4.1）。Block B/C/E/F は alpha2 以降で順次実装予定 |
 | 2026-04-28 | 0.4.0-alpha1+rev | **ISSUE-003 BUG-1/2/3 修正**。(BUG-1) CLI で `include_subnodes: false` ハードコード問題を解消、`SemanticConfig.include_subnodes`（既定 true）追加。(BUG-2) ALTER TABLE 自動 migration 順序修正（`migrate_embeddings_phase2` を `execute_batch` より先に実行）。(BUG-3) drift 系関数（`compute_node_drift_at` / `_against_snapshot`）がサブノードでも `node.path` 全文を読んでいた問題を修正、`read_current_content_for_node` ヘルパで content_range を尊重 |
@@ -1128,7 +1128,7 @@ app プロジェクトで以下のドリフトが発生した:
 
 **目的:** SPEC で「同一 ID の意味再定義」を明示宣言し、引用箇所を機械的に列挙する。
 
-**有効化:** `.trace-engine.toml` に以下を追加。
+**有効化:** `.legixy.toml` に以下を追加。
 
 ```toml
 [id_changelog]
@@ -1292,7 +1292,7 @@ legixy context tests/TC-X.rs --granularity subnode --depth 2 --outline-only
 - ONNX モデル配置済み（`embed --all` の前提）
 - `[semantic].include_subnodes = true`（既定、Phase 2 alpha1 以降）
 
-**有効化（`.trace-engine.toml`）:**
+**有効化（`.legixy.toml`）:**
 
 ```toml
 [id_semantic_drift]

@@ -7,7 +7,7 @@
 ```
 .
 ├── pyproject.toml
-├── .trace-engine.toml
+├── .legixy.toml
 ├── CLAUDE.md
 ├── docs/...
 ├── scripts/trace-check.sh
@@ -18,7 +18,7 @@
 └── bench/                      # pytest-benchmark の測定
 ```
 
-`.trace-engine.toml`:
+`.legixy.toml`:
 
 ```toml
 [id.types.TC]

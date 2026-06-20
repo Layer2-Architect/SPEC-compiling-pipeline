@@ -8,7 +8,7 @@ Thumbs.db
 .scp/
 
 # local engine artifacts (legixy / traceability-engine)
-.trace-engine/
+.legixy/
 *.db
 
 # scratch

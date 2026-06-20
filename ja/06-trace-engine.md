@@ -8,9 +8,9 @@
 
 詳細仕様は `../manual/legixy/manual.md` を参照（公式マニュアルのコピー）。本ドキュメントは本フレームワーク運用上の最低限のサマリ。
 
-## 1. `.trace-engine.toml` の構造
+## 1. `.legixy.toml` の構造
 
-`bootstrap/trace-engine.toml.template` をコピーして、`area` を自プロジェクト用に置換する。主要セクション:
+`bootstrap/legixy.toml.template` をコピーして、`area` を自プロジェクト用に置換する。主要セクション:
 
 ```toml
 [project]
@@ -255,7 +255,7 @@ independent = ["ADR"]
 
 公式マニュアルの全文は `../manual/legixy/manual.md`。主要章節:
 
-- §2.5 設定ファイル（`.trace-engine.toml`）
+- §2.5 設定ファイル（`.legixy.toml`）
 - §3 graph.toml の構造
 - §4 check サブコマンドの詳細
 - §11 ID Changelog と IdRedefined

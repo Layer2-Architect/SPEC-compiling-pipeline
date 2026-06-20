@@ -1,7 +1,7 @@
-# .trace-engine.toml — SCP フレームワーク標準テンプレート
+# .legixy.toml — SCP フレームワーク標準テンプレート
 #
 # 使い方:
-#   1. このファイルをプロジェクトルートに `.trace-engine.toml` としてコピー
+#   1. このファイルをプロジェクトルートに `.legixy.toml` としてコピー
 #   2. <YOUR-AREA> を 3〜5 文字の area コードに置換（例: APP, OPS, PAY, CMS）
 #   3. project.name を自プロジェクト名に置換
 #   4. 必要なら typecode の dir / ext を調整

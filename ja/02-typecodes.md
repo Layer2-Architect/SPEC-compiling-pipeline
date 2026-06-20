@@ -168,9 +168,9 @@ kind = "chain"
 
 ## 8. 新規 typecode を追加するときの手順
 
-ハードルール 4: **新しい成果物タイプは `.trace-engine.toml` 更新が先**。
+ハードルール 4: **新しい成果物タイプは `.legixy.toml` 更新が先**。
 
-1. `.trace-engine.toml` の `[id.types.<TYPE>]` セクションを追加（dir / ext / file_pattern を指定）
+1. `.legixy.toml` の `[id.types.<TYPE>]` セクションを追加（dir / ext / file_pattern を指定）
 2. `[id.chain] order` または `independent` のどちらに入るかを判断し、追加
 3. ID を 3 パート `{type}-<AREA>-NNN` 形式で命名
 4. ファイル先頭に `Document ID:` 行を必置（`file_pattern = "contains"` のとき）または `prefix` 命名規則に従う
