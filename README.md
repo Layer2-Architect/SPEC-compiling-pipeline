@@ -2,6 +2,8 @@
 
 **[English](en/README.md) ・ [日本語](ja/README.md)**
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20773187.svg)](https://doi.org/10.5281/zenodo.20773187)
+
 > A quality-bias-prevention framework for operating a probabilistic transformer (an LLM)
 > as a software compiler from SPEC and Use Cases.
 >
@@ -76,3 +78,13 @@ SCP はこれに対し、AI の内部チューニング（プロンプト・fine
 ## License
 
 Licensed under the **Apache License 2.0** — see [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE).
+
+## Citation / 引用
+
+This repository is archived on Zenodo. If you reference SCP, please cite it via its DOI:
+
+- **DOI**: [10.5281/zenodo.20773187](https://doi.org/10.5281/zenodo.20773187)
+
+> SPEC Compiling Pipeline (SCP). Zenodo. https://doi.org/10.5281/zenodo.20773187
+
+SCP を参照する場合は、上記 DOI（Zenodo アーカイブ）で引用してください。
