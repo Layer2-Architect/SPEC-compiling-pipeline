@@ -56,10 +56,10 @@ else
 fi
 ```
 
-### Step 3: trace --upstream で関連ドキュメント収集
+### Step 3: investigate で関連ドキュメント収集
 
 ```bash
-legixy trace --upstream "$TARGET" --max-depth 10 > .scp/event-output/${TIMESTAMP}-upstream.txt
+legixy investigate "$TARGET" --max-depth 10 > .scp/event-output/${TIMESTAMP}-upstream.txt
 ```
 
 連鎖が長すぎる (max-depth に到達) 場合は警告を出力。

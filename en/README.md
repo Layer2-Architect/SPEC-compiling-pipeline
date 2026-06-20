@@ -185,7 +185,7 @@ The event-driven modification flow classifies changes to an existing chain into 
 | **Spec change** | `/spec-change` | Intentional change to an existing SPEC / UC |
 | **Defect fix** | `/defect-fix` | From defect detection through root-cause analysis, fix, and rebuild |
 
-Key features: a common core operation (`trace --upstream` → `impact` → reference artifacts →
+Key features: a common core operation (`investigate` → `impact` → reference artifacts →
 generate fix candidates); incremental rebuild (selectively regenerate downstream from the modified
 document); a 3-cycle overrun warning; and an event log appended to `.scp/event-log.txt`.
 **Unverified**: the event flow is a spec built through a thought experiment and not yet validated in
